@@ -2,7 +2,10 @@ package com.snobot.simulator;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,8 +13,9 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.snobot.simulator.gui.SimulatorFrame;
 import com.snobot.simulator.joysticks.IMockJoystick;
@@ -29,16 +33,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 /**
  * The actual simulator. Runs the robot and the GUI threads. The GUI will appear
  * after receiving the signal that the robot code has started
- * 
+ *
  * @author PJ
- * 
+ *
  */
 public class Simulator
 {
-    private static final Logger sLOGGER = Logger.getLogger(Simulator.class);
+    private static final Logger sLOGGER = LogManager.getLogger(Simulator.class);
 
-    private final String USER_CONFIG_DIRECTORY;
-    private final String PROPERTIES_FILE;
+    private final String mUserConfigDirectory;
+    private final String mPropertiesFile;
 
     // private String mSimulatorClassName; // The name of the class that
     // represents the simulator
@@ -53,7 +57,7 @@ public class Simulator
 
     /**
      * Constructor
-     * 
+     *
      * @param aLogLevel
      *            The log level to set up the simulator with
      * @param aPluginDirectory
@@ -70,13 +74,13 @@ public class Simulator
         PluginSniffer sniffer = new PluginSniffer();
         sniffer.loadPlugins(aPluginDirectory);
 
-        USER_CONFIG_DIRECTORY = aUserConfigDir;
-        PROPERTIES_FILE = USER_CONFIG_DIRECTORY + "simulator_config.properties";
+        mUserConfigDirectory = aUserConfigDir;
+        mPropertiesFile = mUserConfigDirectory + "simulator_config.properties";
 
-        File config_dir = new File(aUserConfigDir);
-        if (!Files.exists(config_dir.toPath()))
+        File configDir = new File(aUserConfigDir);
+        if (!Files.exists(configDir.toPath()) && !configDir.mkdir())
         {
-            config_dir.mkdir();
+            sLOGGER.log(Level.ERROR, "Could not create config directory at " + configDir);
         }
     }
 
@@ -90,22 +94,34 @@ public class Simulator
                 sLOGGER.log(Level.WARN,
                         "Could not read properties file, will use defaults and will overwrite the file if it exists");
 
-                String defaultSimConfig = USER_CONFIG_DIRECTORY + "simulator_config.yml";
+                String defaultSimConfig = mUserConfigDirectory + "simulator_config.yml";
                 Properties defaults = new Properties();
-                defaults.load(Simulator.class.getResourceAsStream("/com/snobot/simulator/config/default_properties.properties"));
+
+                try (InputStream stream = Simulator.class.getResourceAsStream("/com/snobot/simulator/config/default_properties.properties"))
+                {
+                    defaults.load(stream);
+                }
                 defaults.putIfAbsent("simulator_config", defaultSimConfig);
 
                 File defaultConfigFile = new File(defaultSimConfig);
-                if (!defaultConfigFile.exists())
+                if (!defaultConfigFile.exists() && !defaultConfigFile.createNewFile())
                 {
-                    defaultConfigFile.createNewFile();
+                    sLOGGER.log(Level.WARN, "Could not create default config file at " + defaultConfigFile);
                 }
 
-                defaults.store(new FileWriter(aFile), "");
+                try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(aFile), "UTF-8"))
+                {
+                    defaults.store(fw, "");
+                }
+
             }
 
             Properties p = new Properties();
-            p.load(new FileInputStream(new File(aFile)));
+
+            try (FileInputStream fis = new FileInputStream(new File(aFile)))
+            {
+                p.load(fis);
+            }
 
             String robotClassName = p.getProperty("robot_class");
             String robotType = p.getProperty("robot_type");
@@ -120,11 +136,12 @@ public class Simulator
             // the robot, stop the server and restart it
             NetworkTableInstance inst = NetworkTableInstance.getDefault();
             inst.stopServer();
-            inst.startServer(USER_CONFIG_DIRECTORY + "networktables.ini");
+            inst.startServer(mUserConfigDirectory + "networktables.ini");
         }
-        catch (Exception e)
+        catch (IOException | InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | SecurityException
+                | IllegalArgumentException | InvocationTargetException ex)
         {
-            sLOGGER.log(Level.WARN, "Could not read properties file", e);
+            sLOGGER.log(Level.WARN, "Could not read properties file", ex);
         }
     }
 
@@ -134,15 +151,15 @@ public class Simulator
     {
         sLOGGER.log(Level.INFO, "Starting Robot Code");
 
-        if (aRobotType == null || aRobotType.equals("java"))
+        if (aRobotType == null || "java".equals(aRobotType))
         {
             mRobot = new JavaRobotContainer(aRobotClassName);
         }
-        else if (aRobotType.equals("cpp"))
+        else if ("cpp".equals(aRobotType))
         {
             mRobot = new CppRobotContainer(aRobotClassName);
         }
-        else if (aRobotType.equals("python"))
+        else if ("python".equals(aRobotType))
         {
             mRobot = new PythonRobotContainer(aRobotClassName);
         }
@@ -158,7 +175,7 @@ public class Simulator
     {
         try
         {
-            if (aSimulatorClassName != null && !aSimulatorClassName.isEmpty())
+            if (aSimulatorClassName != null && !aSimulatorClassName.isEmpty()) // NOPMD
             {
                 mSimulator = (ASimulator) Class.forName(aSimulatorClassName).newInstance();
                 mSimulator.loadConfig(aSimulatorConfig);
@@ -180,7 +197,7 @@ public class Simulator
 
     /**
      * Starts the simulation by starting the robot and the GUI
-     * 
+     *
      * @throws InstantiationException
      *             Thrown the robot class could not be started with reflection
      * @throws IllegalAccessException
@@ -200,11 +217,11 @@ public class Simulator
             throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, SecurityException,
             IllegalArgumentException, InvocationTargetException
     {
-        loadConfig(PROPERTIES_FILE);
+        loadConfig(mPropertiesFile);
 
         sendJoystickUpdate();
 
-        if (mSimulator != null && mRobot != null)
+        if (mSimulator != null && mRobot != null) // NOPMD
         {
             mRobotThread = new Thread(createRobotThread(), "RobotThread");
             mSimulatorThread = new Thread(createSimulationThread(), "SimulatorThread");
@@ -229,16 +246,16 @@ public class Simulator
         }
     }
 
-    protected void setFrameVisible(SimulatorFrame frame)
+    protected void setFrameVisible(SimulatorFrame aFrame)
     {
-        frame.pack();
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        aFrame.pack();
+        aFrame.setVisible(true);
+        aFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void sendJoystickUpdate()
     {
-        IMockJoystick[] joysticks = JoystickFactory.get().getAll();
+        IMockJoystick[] joysticks = JoystickFactory.getInstance().getAll();
         for (int i = 0; i < joysticks.length; ++i)
         {
             IMockJoystick joystick = joysticks[i];
@@ -269,6 +286,7 @@ public class Simulator
                     while (mRunningSimulator)
                     {
                         DataAccessorFactory.getInstance().getSimulatorDataAccessor().waitForNextUpdateLoop();
+                        DataAccessorFactory.getInstance().getSimulatorDataAccessor().updateSimulatorComponents();
 
                         mSimulator.update();
                         frame.updateLoop();
@@ -322,11 +340,6 @@ public class Simulator
     protected void stop()
     {
         sLOGGER.log(Level.INFO, "Stopping simulator");
-
-        if (mSimulator != null)
-        {
-            mSimulator.shutdown();
-        }
 
         if (mSimulatorThread != null)
         {

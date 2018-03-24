@@ -2,8 +2,9 @@ package com.snobot.simulator.joysticks;
 
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
@@ -11,7 +12,7 @@ import net.java.games.input.Controller;
 
 public class BaseJoystick implements IMockJoystick
 {
-    private static final Logger sLOGGER = Logger.getLogger(BaseJoystick.class);
+    private static final Logger sLOGGER = LogManager.getLogger(BaseJoystick.class);
 
     protected final String mName;
     protected final List<Identifier> mAxis;
@@ -52,7 +53,7 @@ public class BaseJoystick implements IMockJoystick
     }
 
     @Override
-    public void setRumble(short s)
+    public void setRumble(short aRumble)
     {
         // TODO implement rumble...
     }
@@ -61,7 +62,11 @@ public class BaseJoystick implements IMockJoystick
     public float[] getAxisValues()
     {
 
-        if (mController != null)
+        if (mController == null)
+        {
+            sLOGGER.log(Level.WARN, "Controller is null.  The simulator could not setup a controller of type [" + mName + "]");
+        }
+        else
         {
             mController.poll();
 
@@ -74,11 +79,6 @@ public class BaseJoystick implements IMockJoystick
                 }
             }
         }
-        else
-        {
-            sLOGGER.log(Level.WARN,
-                    "Controller is null.  The simulator could not setup a controller of type [" + mName + "]");
-        }
 
         return mAxisValues;
     }
@@ -89,7 +89,11 @@ public class BaseJoystick implements IMockJoystick
 
         int output = 0;
 
-        if (mController != null)
+        if (mController == null)
+        {
+            sLOGGER.log(Level.WARN, "Controller is null.  The simulator could not setup a controller of type [" + mName + "]");
+        }
+        else
         {
             mController.poll();
 
@@ -99,14 +103,9 @@ public class BaseJoystick implements IMockJoystick
                 if (component != null)
                 {
                     int pressed = component.getPollData() == 0 ? 0 : 1;
-                    output += (pressed << i);
+                    output += pressed << i;
                 }
             }
-        }
-        else
-        {
-            sLOGGER.log(Level.WARN,
-                    "Controller is null.  The simulator could not setup a controller of type [" + mName + "]");
         }
 
         return output;

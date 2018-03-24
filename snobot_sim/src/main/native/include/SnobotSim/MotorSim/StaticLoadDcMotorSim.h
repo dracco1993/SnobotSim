@@ -5,12 +5,12 @@
  *      Author: preiniger
  */
 
-#ifndef STATICLOADDCMOTORSIM_H_
-#define STATICLOADDCMOTORSIM_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORSIM_STATICLOADDCMOTORSIM_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORSIM_STATICLOADDCMOTORSIM_H_
 
 #include "SnobotSim/MotorSim/BaseDcMotorSimulator.h"
 
-class EXPORT_ StaticLoadDcMotorSim: public BaseDcMotorSimulator
+class EXPORT_ StaticLoadDcMotorSim : public BaseDcMotorSimulator
 {
 public:
     StaticLoadDcMotorSim(const DcMotorModel& aMotorModel, double aLoad, double aConversionFactor = 1);
@@ -24,4 +24,4 @@ protected:
     const double mLoad;
 };
 
-#endif /* STATICLOADDCMOTORSIM_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORSIM_STATICLOADDCMOTORSIM_H_

@@ -5,18 +5,19 @@
  *      Author: PJ
  */
 
-#ifndef SPEEDCONTROLLERWRAPPER_H_
-#define SPEEDCONTROLLERWRAPPER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_SPEEDCONTROLLERWRAPPER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_SPEEDCONTROLLERWRAPPER_H_
 
 #include <memory>
+
+#include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
 #include "SnobotSim/MotorSim/IMotorSimulator.h"
 #include "SnobotSim/SimulatorComponents/IFeedbackSensor.h"
-#include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
 
-class EXPORT_ SpeedControllerWrapper: public AModuleWrapper
+class EXPORT_ SpeedControllerWrapper : public AModuleWrapper
 {
 public:
-    SpeedControllerWrapper(int aPort);
+    explicit SpeedControllerWrapper(int aPort);
     virtual ~SpeedControllerWrapper();
 
     virtual int GetId();
@@ -48,11 +49,9 @@ public:
     virtual void Reset(double aPosition, double aVelocity, double aCurrent);
 
 protected:
-
     int mId;
     std::shared_ptr<IMotorSimulator> mMotorSimulator;
     std::shared_ptr<IFeedbackSensor> mFeedbackSensor;
-
 };
 
-#endif /* SPEEDCONTROLLERWRAPPER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_SPEEDCONTROLLERWRAPPER_H_

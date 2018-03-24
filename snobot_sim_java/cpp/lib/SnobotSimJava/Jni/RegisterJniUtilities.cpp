@@ -1,7 +1,7 @@
 
 #include "SnobotSimJava/Jni/RegisterJniUtilities.h"
-#include "SnobotSimJava/Logging/SnobotLogger.h"
 
+#include "SnobotSimJava/Logging/SnobotLogger.h"
 #include "support/jni_util.h"
 
 using namespace wpi::java;
@@ -38,7 +38,7 @@ namespace SnobotSimJava
         }
 
         return env->NewObject(theClazz, constructor,
-                (int) value->type,
+                static_cast<int>(value->type),
                 value->data.v_boolean,
                 value->data.v_enum,
                 value->data.v_int,
@@ -50,7 +50,7 @@ namespace SnobotSimJava
     {
         JavaVMAttachArgs args = {JNI_VERSION_1_2, 0, 0};
         JNIEnv* aEnv;
-        gJvm->AttachCurrentThread((void**) &aEnv, &args);
+        gJvm->AttachCurrentThread(reinterpret_cast<void**>(&aEnv), &args);
 
         if(aEnv == NULL || callbackHelper.mClazz == NULL || callbackHelper.mMethodId == NULL)
         {
@@ -58,7 +58,7 @@ namespace SnobotSimJava
             return;
         }
 
-        int port = *((int*) param);
+        int port = *(reinterpret_cast<int*>(param));
         jstring nameString = MakeJString(aEnv, name);
         jobject halValue = ConvertHalValue(aEnv, value);
 
@@ -69,5 +69,4 @@ namespace SnobotSimJava
             aEnv->ExceptionDescribe();
         }
     }
-}
-
+}  // namespace SnobotSimJava

@@ -7,40 +7,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.snobot.simulator.joysticks.joystick_specializations.NullJoystick;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import net.java.games.input.Controller;
 
-public class JoystickFactory
+public final class JoystickFactory
 {
     public static final String sJOYSTICK_CONFIG_FILE = "simulator_config/joystick_config.properties";
 
-    private static final Logger sLOGGER = Logger.getLogger(JoystickFactory.class);
+    private static final Logger sLOGGER = LogManager.getLogger(JoystickFactory.class);
 
     private static final JoystickFactory sINSTANCE = new JoystickFactory();
     private static final String sKEY = "Joystick_";
 
-    public static JoystickFactory get()
+    private IMockJoystick[] mJoystickMap;
+    private final Map<String, ControllerConfiguration> mControllerConfig;
+
+    public static JoystickFactory getInstance()
     {
         return sINSTANCE;
     }
 
-    private IMockJoystick[] mJoystickMap;
-    private Map<String, ControllerConfiguration> mControllerConfig;
-
     private JoystickFactory()
     {
-        mControllerConfig = new HashMap<>();
-
         mJoystickMap = new IMockJoystick[DriverStation.kJoystickPorts];
         for (int i = 0; i < DriverStation.kJoystickPorts; ++i)
         {
@@ -71,17 +69,17 @@ public class JoystickFactory
                 p.put(sKEY + i, joystickName + "---" + specializationName);
             }
 
-            FileOutputStream stream = new FileOutputStream(sJOYSTICK_CONFIG_FILE);
-
-            p.store(stream, "");
-            stream.close();
+            try (FileOutputStream stream = new FileOutputStream(sJOYSTICK_CONFIG_FILE))
+            {
+                p.store(stream, "");
+            }
 
             sLOGGER.log(Level.INFO,
                     "Wrote joystick config file to " + new File(sJOYSTICK_CONFIG_FILE).getAbsolutePath());
         }
-        catch (Exception e1)
+        catch (Exception ex)
         {
-            e1.printStackTrace();
+            sLOGGER.log(Level.ERROR, ex);
         }
     }
 
@@ -96,10 +94,10 @@ public class JoystickFactory
 
         try
         {
-            InputStream input_stream = new FileInputStream(sJOYSTICK_CONFIG_FILE);
+            InputStream inputStream = new FileInputStream(sJOYSTICK_CONFIG_FILE);
             Properties properties = new Properties();
-            properties.load(input_stream);
-            input_stream.close();
+            properties.load(inputStream);
+            inputStream.close();
 
             for (Entry<Object, Object> i : properties.entrySet())
             {
@@ -111,7 +109,7 @@ public class JoystickFactory
                 String joystickName = parts[0];
                 String specialization = parts[1];
 
-                if (!specialization.equals("null"))
+                if (!"null".equals(specialization))
                 {
                     setSpecialization(joystickName, (Class<? extends IMockJoystick>) Class.forName(specialization), false);
                 }
@@ -120,7 +118,7 @@ public class JoystickFactory
         }
         catch (IOException | ClassNotFoundException ex)
         {
-            ex.printStackTrace();
+            sLOGGER.log(Level.ERROR, ex);
         }
     }
 

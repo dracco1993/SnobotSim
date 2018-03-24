@@ -1,28 +1,32 @@
 
 package com.snobot.simulator.jni;
 
-public class SimulationConnectorJni extends BaseSimulatorJni
+public final class SimulationConnectorJni extends BaseSimulatorJni
 {
-    
+    private SimulationConnectorJni()
+    {
+
+    }
+
     public static native void updateLoop();
 
     public static native boolean setSpeedControllerModel_Simple(
-            int aSpeedControllerHandle, 
+            int aSpeedControllerHandle,
             double aMaxSpeed);
 
     public static native boolean setSpeedControllerModel_Static(
-            int aSpeedControllerHandle, 
+            int aSpeedControllerHandle,
             LocalDcMotorModelConfig aConfig,
             double aLoad,
             double aConversionFactor);
 
     public static native boolean setSpeedControllerModel_Gravitational(
-            int aSpeedControllerHandle, 
+            int aSpeedControllerHandle,
             LocalDcMotorModelConfig aConfig,
             double aLoad);
 
     public static native boolean setSpeedControllerModel_Rotational(
-            int aSpeedControllerHandle, 
+            int aSpeedControllerHandle,
             LocalDcMotorModelConfig aConfig,
             double aArmCenterOfMass,
             double aArmMass,
@@ -30,9 +34,9 @@ public class SimulationConnectorJni extends BaseSimulatorJni
             double aOverCenterAssistTorque);
 
     public static native boolean connectTankDriveSimulator(
-            int aLeftEncoderHandle, 
-            int aRightEncoderHandle, 
-            int aGyroHandle, 
+            int aLeftEncoderHandle,
+            int aRightEncoderHandle,
+            int aGyroHandle,
             double aTurnKp);
 
     public static native boolean setI2CDefault(int aPort, String aDefaultType);

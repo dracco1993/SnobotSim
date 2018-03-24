@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * Wrapper class around a Java robot
- * 
+ *
  * @author PJ
  *
  */
 public class JavaRobotContainer implements IRobotClassContainer
 {
-    private String mRobotClassName;
+    private final String mRobotClassName;
     private RobotBase mRobot;
 
     public JavaRobotContainer(String aRobotClassName)

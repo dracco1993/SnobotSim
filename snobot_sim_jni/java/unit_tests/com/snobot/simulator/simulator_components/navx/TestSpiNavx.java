@@ -12,82 +12,81 @@ import edu.wpi.first.wpilibj.SPI;
 public class TestSpiNavx extends BaseSimulatorTest
 {
     private static final long SHUTDOWN_TIME = 200;
+    private static final String sNAVX_TYPE = "NavX";
 
     @Test
     public void testConstruction() throws InterruptedException
     {
-        AHRS navx;
-
         // Port = 0
         DataAccessorFactory.getInstance().getSimulatorDataAccessor().reset();
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(0, "NavX");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(0, sNAVX_TYPE);
         Assert.assertEquals(0, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
 
-        navx = new AHRS(SPI.Port.kOnboardCS0);
+        final AHRS navxCs0 = new AHRS(SPI.Port.kOnboardCS0);
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(200));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(201));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(202));
-        navx.free();
+        navxCs0.free();
         Thread.sleep(SHUTDOWN_TIME);
 
         // Port = 1
         DataAccessorFactory.getInstance().getSimulatorDataAccessor().reset();
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(1, "NavX");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(1, sNAVX_TYPE);
         Assert.assertEquals(0, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
 
-        navx = new AHRS(SPI.Port.kOnboardCS1);
+        final AHRS navxCs1 = new AHRS(SPI.Port.kOnboardCS1);
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(203));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(204));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(205));
-        navx.free();
+        navxCs1.free();
         Thread.sleep(SHUTDOWN_TIME);
 
         // Port = 2
         DataAccessorFactory.getInstance().getSimulatorDataAccessor().reset();
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(2, "NavX");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(2, sNAVX_TYPE);
         Assert.assertEquals(0, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
 
-        navx = new AHRS(SPI.Port.kOnboardCS2);
+        final AHRS navxCs2 = new AHRS(SPI.Port.kOnboardCS2);
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(206));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(207));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(208));
-        navx.free();
+        navxCs2.free();
         Thread.sleep(SHUTDOWN_TIME);
 
         // Port = 3
         DataAccessorFactory.getInstance().getSimulatorDataAccessor().reset();
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(3, "NavX");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(3, sNAVX_TYPE);
         Assert.assertEquals(0, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
 
-        navx = new AHRS(SPI.Port.kOnboardCS3);
+        final AHRS navxCs3 = new AHRS(SPI.Port.kOnboardCS3);
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(209));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(210));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(211));
-        navx.free();
+        navxCs3.free();
         Thread.sleep(SHUTDOWN_TIME);
 
         // Port = 4
         DataAccessorFactory.getInstance().getSimulatorDataAccessor().reset();
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(4, "NavX");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(4, sNAVX_TYPE);
         Assert.assertEquals(0, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
 
-        navx = new AHRS(SPI.Port.kMXP);
+        final AHRS navxMxp = new AHRS(SPI.Port.kMXP);
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(212));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(213));
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(214));
-        navx.free();
+        navxMxp.free();
         Thread.sleep(SHUTDOWN_TIME);
     }
 
     @Test
     public void testSpiNavx() throws InterruptedException
     {
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(1, "NavX");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(1, sNAVX_TYPE);
 
         final int sleepTime = 100;
         AHRS navx = new AHRS(SPI.Port.kOnboardCS1);

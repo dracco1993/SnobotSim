@@ -1,25 +1,23 @@
 
 
-#include "MockData/PCMData.h"
-
 #include "SnobotSim/HalCallbacks/SolenoidCallbacks.h"
-#include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/ModuleWrapper/SolenoidWrapper.h"
-#include "SnobotSim/Logging/SnobotLogger.h"
 
+#include "MockData/PCMData.h"
+#include "SnobotSim/Logging/SnobotLogger.h"
+#include "SnobotSim/ModuleWrapper/SolenoidWrapper.h"
+#include "SnobotSim/SensorActuatorRegistry.h"
 
 void SolenoidCallback(const char* name, void* param, const struct HAL_Value* value)
 {
     std::string nameStr = name;
-    int port = *((int*) param);
+    int port = *reinterpret_cast<int*>(param);
 
-    if(nameStr == "SolenoidInitialized")
+    if (nameStr == "SolenoidInitialized")
     {
         SensorActuatorRegistry::Get().Register(port,
-                std::shared_ptr < SolenoidWrapper
-                        > (new SolenoidWrapper(port)));
+                std::shared_ptr<SolenoidWrapper>(new SolenoidWrapper(port)));
     }
-    else if(nameStr == "SolenoidOutput")
+    else if (nameStr == "SolenoidOutput")
     {
         bool on = value->data.v_boolean;
         SensorActuatorRegistry::Get().GetSolenoidWrapper(port)->SetState(on);
@@ -34,7 +32,7 @@ int gSolenoidArrayIndices[20];
 
 void SnobotSim::InitializeSolenoidCallbacks()
 {
-    for(int i = 0; i < HAL_GetNumSolenoidChannels(); ++i)
+    for (int i = 0; i < HAL_GetNumSolenoidChannels(); ++i)
     {
         gSolenoidArrayIndices[i] = i;
         HALSIM_RegisterPCMSolenoidInitializedCallback(0, i, &SolenoidCallback, &gSolenoidArrayIndices[i], false);
@@ -44,7 +42,7 @@ void SnobotSim::InitializeSolenoidCallbacks()
 
 void SnobotSim::ResetSolenoidCallbacks()
 {
-    for(int i = 0; i < HAL_GetNumSolenoidChannels(); ++i)
+    for (int i = 0; i < HAL_GetNumSolenoidChannels(); ++i)
     {
         HALSIM_ResetPCMData(0);
     }

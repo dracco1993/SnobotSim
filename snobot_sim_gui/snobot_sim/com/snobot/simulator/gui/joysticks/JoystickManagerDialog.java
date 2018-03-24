@@ -12,19 +12,19 @@ import java.util.Map.Entry;
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.snobot.simulator.joysticks.ControllerConfiguration;
 import com.snobot.simulator.joysticks.JoystickFactory;
 
 public class JoystickManagerDialog extends JDialog
 {
-    private static final Logger sLOGGER = Logger.getLogger(JoystickManagerDialog.class);
+    private static final Logger sLOGGER = LogManager.getLogger(JoystickManagerDialog.class);
     private static final int sUPDATE_TIME = 20;
 
     private Map<String, JoystickTabPanel> mJoystickPanels;
-    private SelectionPanel mSelectionPanel;
     private boolean mIsOpen;
 
     public JoystickManagerDialog()
@@ -52,7 +52,7 @@ public class JoystickManagerDialog extends JDialog
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFocusable(false);
 
-        JoystickFactory joystickFactory = JoystickFactory.get();
+        JoystickFactory joystickFactory = JoystickFactory.getInstance();
 
         Map<String, ControllerConfiguration> goodControllers = joystickFactory.getControllerConfiguration();
 
@@ -73,9 +73,9 @@ public class JoystickManagerDialog extends JDialog
             }
         }
 
-        mSelectionPanel = new SelectionPanel(goodControllers.keySet(), joystickFactory.getAll());
+        SelectionPanel selectionPanel = new SelectionPanel(goodControllers.keySet(), joystickFactory.getAll());
 
-        add(mSelectionPanel, BorderLayout.WEST);
+        add(selectionPanel, BorderLayout.WEST);
         add(tabbedPane, BorderLayout.CENTER);
     }
 
@@ -102,9 +102,9 @@ public class JoystickManagerDialog extends JDialog
                         {
                             Thread.sleep(sUPDATE_TIME);
                         }
-                        catch (InterruptedException e)
+                        catch (InterruptedException aEvent)
                         {
-                            sLOGGER.log(Level.ERROR, e);
+                            sLOGGER.log(Level.ERROR, aEvent);
                         }
                     }
                 }
@@ -120,10 +120,10 @@ public class JoystickManagerDialog extends JDialog
         mIsOpen = false;
     }
 
-    private WindowListener mCloseListener = new WindowAdapter()
+    private final WindowListener mCloseListener = new WindowAdapter()
     {
         @Override
-        public void windowClosing(WindowEvent e)
+        public void windowClosing(WindowEvent aEvent)
         {
             close();
         }

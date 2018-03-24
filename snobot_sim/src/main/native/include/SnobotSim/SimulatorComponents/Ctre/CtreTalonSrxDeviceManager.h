@@ -5,8 +5,8 @@
  *      Author: PJ
  */
 
-#ifndef CTRETALONSRXDEVICEMANAGER_H_
-#define CTRETALONSRXDEVICEMANAGER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CTRETALONSRXDEVICEMANAGER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CTRETALONSRXDEVICEMANAGER_H_
 
 #include <map>
 
@@ -26,7 +26,6 @@ public:
     uint32_t ReadStreamSession(uint32_t aSessionHandle, struct HAL_CANStreamMessage* aMessages, uint32_t aMessagesToRead);
 
 protected:
-
     // Send
     void HandleTx1(const uint8_t* aData, int aPort);
     void HandleSetParamCommand(const uint8_t* aData, int aPort);
@@ -43,4 +42,4 @@ protected:
     HAL_CANStreamMessage mStreamMessage;
 };
 
-#endif /* CTRETALONXSRXDEVICEMANAGER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CTRETALONSRXDEVICEMANAGER_H_

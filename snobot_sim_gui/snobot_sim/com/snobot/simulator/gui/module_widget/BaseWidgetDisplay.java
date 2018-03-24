@@ -21,22 +21,23 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class BaseWidgetDisplay<KeyType, WidgetType extends Container> extends JPanel
 {
-    private static final Logger sLOGGER = Logger.getLogger(BaseWidgetDisplay.class);
+    private static final Logger sLOGGER = LogManager.getLogger(BaseWidgetDisplay.class);
 
     protected Map<KeyType, WidgetType> mWidgetMap;
     protected Map<KeyType, JLabel> mLabelMap;
-    protected List<JButton> settingsButtons;
+    protected List<JButton> mSettingsButtons;
 
     public BaseWidgetDisplay(Collection<KeyType> aKeys)
     {
         setLayout(new GridBagLayout());
 
-        settingsButtons = new ArrayList<>();
+        mSettingsButtons = new ArrayList<>();
         mWidgetMap = new HashMap<>();
         mLabelMap = new HashMap<>();
 
@@ -68,12 +69,12 @@ public abstract class BaseWidgetDisplay<KeyType, WidgetType extends Container> e
                 if (settingsDialog != null)
                 {
                     settingsDialog.setModal(true);
-                    settingsButtons.add(settingsButton);
+                    mSettingsButtons.add(settingsButton);
 
                     settingsButton.addActionListener(new ActionListener()
                     {
                         @Override
-                        public void actionPerformed(ActionEvent e)
+                        public void actionPerformed(ActionEvent aEvent)
                         {
                             settingsDialog.setLocationRelativeTo(BaseWidgetDisplay.this);
                             settingsDialog.setVisible(true);
@@ -81,7 +82,7 @@ public abstract class BaseWidgetDisplay<KeyType, WidgetType extends Container> e
                     });
                 }
 
-                JLabel label = new JLabel("" + getName(key));
+                JLabel label = new JLabel(getName(key));
 
                 mWidgetMap.put(key, panelPair);
                 mLabelMap.put(key, label);
@@ -121,7 +122,7 @@ public abstract class BaseWidgetDisplay<KeyType, WidgetType extends Container> e
 
     public void showSettingsButtons(boolean aShow)
     {
-        for (JButton btn : settingsButtons)
+        for (JButton btn : mSettingsButtons)
         {
             btn.setVisible(aShow);
         }

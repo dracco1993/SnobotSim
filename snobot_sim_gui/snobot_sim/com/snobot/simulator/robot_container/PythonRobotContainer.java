@@ -4,10 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * Wrapper around a python robot.
- * 
+ *
  * @deprecated This isn't currently hooked up, because the Jython library is
  *             humongous and robotpy isn't updated yet
- * 
+ *
  * @author PJ
  *
  */
@@ -44,7 +44,7 @@ public class PythonRobotContainer implements IRobotClassContainer
         // mRobot.invoke("startCompetition");
     }
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
+    public static void main(String[] aArgs) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException,
             SecurityException, IllegalArgumentException, InvocationTargetException
     {
         PythonRobotContainer container = new PythonRobotContainer("C:/Users/PJ/workspace/first_2017/PythonRobot--PjsTestRobot");

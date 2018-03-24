@@ -19,7 +19,7 @@ import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 
 /**
  * This is the top level panel that shows all of the simulator components
- * 
+ *
  * @author PJ
  *
  */
@@ -31,8 +31,9 @@ public class GraphicalSensorDisplayPanel extends JPanel
     }
 
     protected List<BaseWidgetDisplay<?, ?>> mDisplayPanels;
+    protected AdvancedSettingsPanel mAdvancedSettingsPanel;
 
-    public void create()
+    private void create()
     {
         mDisplayPanels = new ArrayList<>();
 
@@ -46,19 +47,22 @@ public class GraphicalSensorDisplayPanel extends JPanel
         mDisplayPanels.add(new AccelerometerOutputDisplay(DataAccessorFactory.getInstance().getAccelerometerAccessor().getPortList()));
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
-        for(BaseWidgetDisplay<?, ?> panel : mDisplayPanels)
+
+        for (BaseWidgetDisplay<?, ?> panel : mDisplayPanels)
         {
-            if(!panel.isEmpty())
+            if (!panel.isEmpty())
             {
                 add(panel);
             }
         }
+
+        mAdvancedSettingsPanel = new AdvancedSettingsPanel();
+        add(mAdvancedSettingsPanel);
     }
 
     public void update()
     {
-        for(BaseWidgetDisplay<?, ?> panel : mDisplayPanels)
+        for (BaseWidgetDisplay<?, ?> panel : mDisplayPanels)
         {
             panel.update();
         }
@@ -68,9 +72,11 @@ public class GraphicalSensorDisplayPanel extends JPanel
 
     public void showSettingsButtons(boolean aShow)
     {
-        for(BaseWidgetDisplay<?, ?> panel : mDisplayPanels)
+        for (BaseWidgetDisplay<?, ?> panel : mDisplayPanels)
         {
             panel.showSettingsButtons(aShow);
         }
+
+        mAdvancedSettingsPanel.showSettingsButtons(aShow);
     }
 }

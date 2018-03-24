@@ -8,7 +8,6 @@ import com.snobot.simulator.wrapper_accessors.GyroWrapperAccessor;
 
 public class JavaGyroWrapperAccessor extends BaseWrapperAccessor<IGyroWrapper> implements GyroWrapperAccessor
 {
-
     @Override
     public double getAngle(int aPort)
     {
@@ -24,7 +23,7 @@ public class JavaGyroWrapperAccessor extends BaseWrapperAccessor<IGyroWrapper> i
     @Override
     public void reset(int aPort)
     {
-
+        // Nothing to do
     }
 
     @Override

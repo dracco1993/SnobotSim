@@ -5,19 +5,20 @@
  *      Author: PJ
  */
 
-#ifndef I2CWRAPPERFACTORY_H_
-#define I2CWRAPPERFACTORY_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_I2C_I2CWRAPPERFACTORY_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_I2C_I2CWRAPPERFACTORY_H_
+
+#include <map>
+#include <memory>
+#include <string>
 
 #include "SnobotSim/SimulatorComponents/I2C/II2CWrapper.h"
-#include <string>
-#include <memory>
-#include <map>
 
-class EXPORT_ I2CWrapperFactory {
-
+class EXPORT_ I2CWrapperFactory
+{
 private:
-	I2CWrapperFactory();
-	virtual ~I2CWrapperFactory();
+    I2CWrapperFactory();
+    virtual ~I2CWrapperFactory();
 
 public:
     static const std::string I2C_ACCELEROMETER_NAME;
@@ -31,7 +32,6 @@ public:
     void ResetDefaults();
 
 protected:
-
     std::shared_ptr<II2CWrapper> CreateWrapper(int aPort, const std::string& aType);
 
     std::map<int, std::string> mDefaultsMap;
@@ -39,4 +39,4 @@ protected:
     static I2CWrapperFactory sINSTANCE;
 };
 
-#endif /* I2CWRAPPERFACTORY_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_I2C_I2CWRAPPERFACTORY_H_

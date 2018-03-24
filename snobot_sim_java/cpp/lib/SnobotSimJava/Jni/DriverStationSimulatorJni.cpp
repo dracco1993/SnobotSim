@@ -1,16 +1,14 @@
 
-#include <assert.h>
 #include <jni.h>
-#include "support/jni_util.h"
 
+#include <cassert>
 #include <chrono>
-
-#include "com_snobot_simulator_jni_DriverStationSimulatorJni.h"
 
 #include "MockData/DriverStationData.h"
 #include "MockData/MockHooks.h"
-
 #include "SnobotSimJava/Logging/SnobotLogger.h"
+#include "com_snobot_simulator_jni_DriverStationSimulatorJni.h"
+#include "support/jni_util.h"
 
 extern "C"
 {
@@ -59,7 +57,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_DriverStationSimulatorJni_d
 {
     if(aDelayPeriod > 0)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds((int) (aDelayPeriod * 1000)));
+//        std::this_thread::sleep_for(std::chrono::milliseconds((int) (aDelayPeriod * 1000)));
         HALSIM_SetDriverStationMatchTime(HALSIM_GetDriverStationMatchTime() + aDelayPeriod);
         HALSIM_NotifyDriverStationNewData();
     }
@@ -106,7 +104,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_DriverStationSimulatorJni_s
     }
     env->ReleaseFloatArrayElements(aAxes, axes, 0);
 
-    short* povs = env->GetShortArrayElements(aPovs, NULL);
+    int16_t* povs = env->GetShortArrayElements(aPovs, NULL);
     newPov.count = env->GetArrayLength(aPovs);
     for (int i = 0; i < newPov.count; ++i)
     {
@@ -140,4 +138,4 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_DriverStationSimulatorJni_s
     HALSIM_SetMatchInfo(&matchInfo);
 }
 
-} // extern c
+}  // extern "C"

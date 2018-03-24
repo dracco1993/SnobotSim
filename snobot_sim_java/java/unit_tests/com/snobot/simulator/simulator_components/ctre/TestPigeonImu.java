@@ -53,7 +53,7 @@ public class TestPigeonImu extends BaseSimulatorTest
         testImu(imu);
     }
 
-    private void testImu(PigeonIMU imu)
+    private void testImu(PigeonIMU aImu)
     {
         final double ANGLE_EPSILON = 1 / 16.0;
 
@@ -66,9 +66,6 @@ public class TestPigeonImu extends BaseSimulatorTest
         int yPort = basePort + 1;
         int zPort = basePort + 2;
 
-        double[] rawAngles = new double[3];
-        FusionStatus fusionStatus = new FusionStatus();
-
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getGyroAccessor().getPortList().size());
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getAccelerometerAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getGyroAccessor().getPortList().contains(yawPort));
@@ -78,8 +75,11 @@ public class TestPigeonImu extends BaseSimulatorTest
         Assert.assertTrue(DataAccessorFactory.getInstance().getAccelerometerAccessor().getPortList().contains(yPort));
         Assert.assertTrue(DataAccessorFactory.getInstance().getAccelerometerAccessor().getPortList().contains(zPort));
 
-        imu.getRawGyro(rawAngles);
-        imu.getFusedHeading(fusionStatus);
+        double[] rawAngles = new double[3];
+        FusionStatus fusionStatus = new FusionStatus();
+
+        aImu.getRawGyro(rawAngles);
+        aImu.getFusedHeading(fusionStatus);
         Assert.assertEquals(0, fusionStatus.heading, ANGLE_EPSILON);
         Assert.assertEquals(0, rawAngles[0], ANGLE_EPSILON);
         Assert.assertEquals(0, rawAngles[1], ANGLE_EPSILON);
@@ -92,8 +92,8 @@ public class TestPigeonImu extends BaseSimulatorTest
         DataAccessorFactory.getInstance().getGyroAccessor().setAngle(pitchPort, -98);
         DataAccessorFactory.getInstance().getGyroAccessor().setAngle(rollPort, 24);
 
-        imu.getRawGyro(rawAngles);
-        imu.getFusedHeading(fusionStatus);
+        aImu.getRawGyro(rawAngles);
+        aImu.getFusedHeading(fusionStatus);
         Assert.assertEquals(47, fusionStatus.heading, ANGLE_EPSILON);
         Assert.assertEquals(47, rawAngles[0], ANGLE_EPSILON);
         Assert.assertEquals(-98, rawAngles[1], ANGLE_EPSILON);

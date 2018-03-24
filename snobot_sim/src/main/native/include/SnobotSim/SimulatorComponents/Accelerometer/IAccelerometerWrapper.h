@@ -5,28 +5,28 @@
  *      Author: PJ
  */
 
-#ifndef ACCELEROMETERWRAPPER_H_
-#define ACCELEROMETERWRAPPER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_ACCELEROMETER_IACCELEROMETERWRAPPER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_ACCELEROMETER_IACCELEROMETERWRAPPER_H_
+
+#include <string>
 
 #include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
 
-class EXPORT_ IAccelerometerWrapper: public AModuleWrapper
+class EXPORT_ IAccelerometerWrapper : public AModuleWrapper
 {
 public:
-	IAccelerometerWrapper(const std::string& aName):
-    	AModuleWrapper(aName)
-	{
-
-	}
+    explicit IAccelerometerWrapper(const std::string& aName) :
+            AModuleWrapper(aName)
+    {
+    }
 
     virtual ~IAccelerometerWrapper()
     {
-
     }
-    
+
     virtual void SetAcceleration(double aAcceleration) = 0;
-    
+
     virtual double GetAcceleration() = 0;
 };
 
-#endif /* ACCELEROMETERWRAPPER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_ACCELEROMETER_IACCELEROMETERWRAPPER_H_

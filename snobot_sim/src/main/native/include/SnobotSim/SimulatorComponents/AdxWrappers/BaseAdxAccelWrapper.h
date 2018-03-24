@@ -5,48 +5,44 @@
  *      Author: PJ
  */
 
-#ifndef BASEADXACCELWRAPPER_H_
-#define BASEADXACCELWRAPPER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_ADXWRAPPERS_BASEADXACCELWRAPPER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_ADXWRAPPERS_BASEADXACCELWRAPPER_H_
 
 #include <memory>
 
+#include "SnobotSim/SimulatorComponents/Accelerometer/IAccelerometerWrapper.h"
 #include "ThreeAxisAccelerometerData.h"
 
-#include "SnobotSim/SimulatorComponents/Accelerometer/IAccelerometerWrapper.h"
-
-class BaseAdxAccelWrapper {
+class BaseAdxAccelWrapper
+{
 public:
-	BaseAdxAccelWrapper(int aBasePort, const std::shared_ptr<hal::ThreeAxisAccelerometerData>& aAccel);
-	virtual ~BaseAdxAccelWrapper();
+    BaseAdxAccelWrapper(int aBasePort, const std::shared_ptr<hal::ThreeAxisAccelerometerData>& aAccel);
+    virtual ~BaseAdxAccelWrapper();
 
 protected:
+    class AccelerometerWrapper : public IAccelerometerWrapper
+    {
+    public:
+        enum AxisType
+        {
+            AXIS_X,
+            AXIS_Y,
+            AXIS_Z
+        };
 
-	class AccelerometerWrapper : public IAccelerometerWrapper
-	{
-	public:
+        AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<hal::ThreeAxisAccelerometerData>& aAccel);
 
-		enum AxisType
-		{
-			AXIS_X,
-			AXIS_Y,
-			AXIS_Z
-		};
+        void SetAcceleration(double aAcceleration) override;
 
-		AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<hal::ThreeAxisAccelerometerData>& aAccel);
+        double GetAcceleration() override;
 
-	    void SetAcceleration(double aAcceleration) override;
-
-	    double GetAcceleration() override;
-
-	    AxisType mAxisType;
-	    std::shared_ptr<hal::ThreeAxisAccelerometerData> mAccel;
-	};
-
+        AxisType mAxisType;
+        std::shared_ptr<hal::ThreeAxisAccelerometerData> mAccel;
+    };
 
     std::shared_ptr<AccelerometerWrapper> mXWrapper;
     std::shared_ptr<AccelerometerWrapper> mYWrapper;
     std::shared_ptr<AccelerometerWrapper> mZWrapper;
-
 };
 
-#endif /* BASEADXACCELWRAPPER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_ADXWRAPPERS_BASEADXACCELWRAPPER_H_

@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class SelectionPanel extends JPanel
 {
-    private class SinglePanel extends JPanel
+    private static class SinglePanel extends JPanel
     {
-        private int mJoystickIndex;
-        private JComboBox<String> mComboBox;
+        private final int mJoystickIndex;
+        private final JComboBox<String> mComboBox;
 
         public SinglePanel(int aIndex)
         {
@@ -53,16 +53,16 @@ public class SelectionPanel extends JPanel
         }
     }
 
-    private List<SinglePanel> panels = new ArrayList<>();
+    private final List<SinglePanel> mPanels = new ArrayList<>();
 
-    public SelectionPanel(Collection<String> aControllerNames, IMockJoystick[] aSelectedJoysticks)
+    public SelectionPanel(Collection<String> aControllerNames, IMockJoystick[] aSelectedJoysticks) // NOPMD
     {
         setLayout(new GridLayout(0, 1, 0, 0));
 
         for (int i = 0; i < DriverStation.kJoystickPorts; ++i)
         {
             SinglePanel panel = new SinglePanel(i);
-            panels.add(panel);
+            mPanels.add(panel);
             add(panel);
 
             panel.setNames(aControllerNames);
@@ -72,11 +72,11 @@ public class SelectionPanel extends JPanel
             {
 
                 @Override
-                public void itemStateChanged(ItemEvent e)
+                public void itemStateChanged(ItemEvent aEvent)
                 {
-                    if (e.getStateChange() == ItemEvent.SELECTED)
+                    if (aEvent.getStateChange() == ItemEvent.SELECTED)
                     {
-                        JoystickFactory.get().setJoysticks(panel.mJoystickIndex, e.getItem().toString());
+                        JoystickFactory.getInstance().setJoysticks(panel.mJoystickIndex, aEvent.getItem().toString());
                     }
                 }
             });

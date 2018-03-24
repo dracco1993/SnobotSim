@@ -6,18 +6,18 @@
  */
 
 #include "SnobotSim/RobotStateSingleton.h"
-#include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/Logging/SnobotLogger.h"
-#include "MockData/DriverStationData.h"
 
 #include <chrono>
 #include <future>
+
+#include "MockData/DriverStationData.h"
+#include "SnobotSim/Logging/SnobotLogger.h"
+#include "SnobotSim/SensorActuatorRegistry.h"
 
 RobotStateSingleton RobotStateSingleton::sINSTANCE;
 
 RobotStateSingleton::RobotStateSingleton()
 {
-
 }
 
 RobotStateSingleton::~RobotStateSingleton()
@@ -37,16 +37,15 @@ void RobotStateSingleton::Reset()
 
 void RobotStateSingleton::WaitForNextControlLoop(double aWaitTime)
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds((int) (aWaitTime * 1000)));
+    std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(aWaitTime * 1000)));
     HALSIM_NotifyDriverStationNewData();
 }
 
 void RobotStateSingleton::UpdateLoop()
 {
-    std::vector<std::shared_ptr<ISimulatorUpdater>>& comps =
-            SensorActuatorRegistry::Get().GetSimulatorComponents();
+    std::vector<std::shared_ptr<ISimulatorUpdater>>& comps = SensorActuatorRegistry::Get().GetSimulatorComponents();
 
-    for(unsigned int i = 0; i < comps.size(); ++i)
+    for (unsigned int i = 0; i < comps.size(); ++i)
     {
         comps[i]->Update();
     }

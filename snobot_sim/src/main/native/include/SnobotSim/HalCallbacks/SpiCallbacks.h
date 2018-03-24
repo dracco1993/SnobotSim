@@ -5,15 +5,15 @@
  *      Author: preiniger
  */
 
-#ifndef SPICALLBACKS_H_
-#define SPICALLBACKS_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_HALCALLBACKS_SPICALLBACKS_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_HALCALLBACKS_SPICALLBACKS_H_
 
 #include "SnobotSim/ExportHelper.h"
 
 namespace SnobotSim
 {
-    EXPORT_ void InitializeSpiCallbacks();
-    EXPORT_ void ResetSpiCallbacks();
-}
+EXPORT_ void InitializeSpiCallbacks();
+EXPORT_ void ResetSpiCallbacks();
+} // namespace SnobotSim
 
-#endif /* SPICALLBACKS_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_HALCALLBACKS_SPICALLBACKS_H_

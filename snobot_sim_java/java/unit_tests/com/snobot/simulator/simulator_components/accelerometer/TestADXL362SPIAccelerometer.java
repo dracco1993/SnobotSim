@@ -12,12 +12,12 @@ import org.junit.runners.Parameterized.Parameters;
 import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 import com.snobot.test.utilities.BaseSimulatorTest;
 
-import edu.wpi.first.wpilibj.ADXL345_SPI;
+import edu.wpi.first.wpilibj.ADXL362;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 
 @RunWith(value = Parameterized.class)
-public class TestADXL345_SPIAccelerometer extends BaseSimulatorTest
+public class TestADXL362SPIAccelerometer extends BaseSimulatorTest
 {
     @Parameters()
     public static Collection<Object[]> data()
@@ -26,10 +26,7 @@ public class TestADXL345_SPIAccelerometer extends BaseSimulatorTest
 
         for (SPI.Port port : SPI.Port.values())
         {
-            for (Range range : Range.values())
-            {
-                output.add(new Object[]{port, range});
-            }
+            output.add(new Object[]{port, Range.k2G});
         }
 
         return output;
@@ -38,25 +35,22 @@ public class TestADXL345_SPIAccelerometer extends BaseSimulatorTest
     private final SPI.Port mPort;
     private final Range mRange;
 
-    public TestADXL345_SPIAccelerometer(SPI.Port aPort, Range aRange)
+    public TestADXL362SPIAccelerometer(SPI.Port aPort, Range aRange)
     {
         mPort = aPort;
         mRange = aRange;
     }
 
     @Test
-    public void testADXL345_SPI()
+    public void testADXL362_SPI()
     {
-        double DOUBLE_EPSILON = 1 / 256.0; // Resoultion isn't as good as normal
-                                           // sensors
-        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(mPort.value, "ADXL345");
+        DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDefaultSpiSimulator(mPort.value, "ADXL362");
 
-        ADXL345_SPI accel = new ADXL345_SPI(mPort, mRange);
-        ADXL345_SPI.AllAxes axes = null;
+        ADXL362 accel = new ADXL362(mPort, mRange);
 
-        int xHandle = 100 + mPort.value * 3;
-        int yHandle = 101 + mPort.value * 3;
-        int zHandle = 102 + mPort.value * 3;
+        int xHandle = 150 + mPort.value * 3;
+        int yHandle = 151 + mPort.value * 3;
+        int zHandle = 152 + mPort.value * 3;
 
         Assert.assertEquals(3, DataAccessorFactory.getInstance().getAccelerometerAccessor().getPortList().size());
         Assert.assertTrue(DataAccessorFactory.getInstance().getAccelerometerAccessor().getPortList().contains(xHandle));
@@ -75,7 +69,7 @@ public class TestADXL345_SPIAccelerometer extends BaseSimulatorTest
         DataAccessorFactory.getInstance().getAccelerometerAccessor().setAcceleration(xHandle, 0);
         DataAccessorFactory.getInstance().getAccelerometerAccessor().setAcceleration(yHandle, 1);
         DataAccessorFactory.getInstance().getAccelerometerAccessor().setAcceleration(zHandle, 2);
-        axes = accel.getAccelerations();
+        ADXL362.AllAxes axes = accel.getAccelerations();
         Assert.assertEquals(0, DataAccessorFactory.getInstance().getAccelerometerAccessor().getAcceleration(xHandle), DOUBLE_EPSILON);
         Assert.assertEquals(1, DataAccessorFactory.getInstance().getAccelerometerAccessor().getAcceleration(yHandle), DOUBLE_EPSILON);
         Assert.assertEquals(2, DataAccessorFactory.getInstance().getAccelerometerAccessor().getAcceleration(zHandle), DOUBLE_EPSILON);

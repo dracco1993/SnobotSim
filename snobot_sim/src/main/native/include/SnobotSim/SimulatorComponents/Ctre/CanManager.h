@@ -5,20 +5,18 @@
  *      Author: PJ
  */
 
-#ifndef CANMANAGER_H_
-#define CANMANAGER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CANMANAGER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CANMANAGER_H_
 
 #include <map>
 #include <memory>
 
-#include "SnobotSim/SimulatorComponents/Ctre/ICanDeviceManager.h"
-
 #include "MockData/NotifyListenerVector.h"
+#include "SnobotSim/SimulatorComponents/Ctre/ICanDeviceManager.h"
 
 class CanManager
 {
 public:
-
     CanManager();
     virtual ~CanManager();
 
@@ -29,7 +27,6 @@ public:
     void HandleCloseStream(uint32_t aSessionHandle);
 
 protected:
-
     typedef std::map<uint32_t, std::shared_ptr<ICanDeviceManager>> IdToDeviceManagerMap_t;
     IdToDeviceManagerMap_t mMessageIdToDeviceManagerMap;
     IdToDeviceManagerMap_t mStreamIdToDeviceManagerMap;
@@ -44,4 +41,4 @@ protected:
     static int sSTREAM_CTR;
 };
 
-#endif /* CANMANAGER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CANMANAGER_H_

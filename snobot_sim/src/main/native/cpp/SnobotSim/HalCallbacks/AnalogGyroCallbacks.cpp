@@ -6,19 +6,18 @@
  */
 
 #include "SnobotSim/HalCallbacks/AnalogGyroCallbacks.h"
+
 #include "MockData/AnalogGyroData.h"
-
-#include "SnobotSim/SensorActuatorRegistry.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
+#include "SnobotSim/SensorActuatorRegistry.h"
 #include "SnobotSim/SimulatorComponents/Gyro/AnalogGyroWrapper.h"
-
 
 void AnalogGyroCallback(const char* name, void* param, const struct HAL_Value* value)
 {
     std::string nameStr = name;
-    int port = *((int*) param);
+    int port = *reinterpret_cast<int*>(param);
 
-    if(nameStr == "Initialized")
+    if (nameStr == "Initialized")
     {
         std::shared_ptr<AnalogSourceWrapper> analogWrapper = SensorActuatorRegistry::Get().GetAnalogSourceWrapper(port);
         analogWrapper->SetWantsHidden(true);
@@ -41,7 +40,7 @@ int gAnalogGyroArrayIndices[26];
 
 void SnobotSim::InitializeAnalogGyroCallbacks()
 {
-    for(int i = 0; i < HAL_GetNumAccumulators(); ++i)
+    for (int i = 0; i < HAL_GetNumAccumulators(); ++i)
     {
         gAnalogGyroArrayIndices[i] = i;
         HALSIM_RegisterAnalogGyroInitializedCallback(i, &AnalogGyroCallback, &gAnalogGyroArrayIndices[i], false);
@@ -52,10 +51,8 @@ void SnobotSim::InitializeAnalogGyroCallbacks()
 
 void SnobotSim::ResetAnalogGyroCallbacks()
 {
-    for(int i = 0; i < HAL_GetNumAccumulators(); ++i)
+    for (int i = 0; i < HAL_GetNumAccumulators(); ++i)
     {
         HALSIM_ResetAnalogGyroData(i);
     }
 }
-
-

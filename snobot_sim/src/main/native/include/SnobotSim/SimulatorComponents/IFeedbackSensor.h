@@ -5,8 +5,8 @@
  *      Author: PJ
  */
 
-#ifndef IFEEDBACKSENSOR_HPP_
-#define IFEEDBACKSENSOR_HPP_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_IFEEDBACKSENSOR_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_IFEEDBACKSENSOR_H_
 
 class IFeedbackSensor
 {
@@ -19,7 +19,6 @@ class NullFeedbackSensor : public IFeedbackSensor
 {
     void SetPosition(double aPosition)
     {
-
     }
     double GetPosition()
     {
@@ -27,5 +26,4 @@ class NullFeedbackSensor : public IFeedbackSensor
     }
 };
 
-
-#endif /* IFEEDBACKSENSOR_HPP_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_IFEEDBACKSENSOR_H_

@@ -3,8 +3,9 @@ package com.snobot.simulator.gui.motor_display;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,17 +20,16 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class MotorComparision extends JPanel
 {
-
-    public void plotSeries(XYSeriesCollection series)
+    public void plotSeries(XYSeriesCollection aSeries)
     {
 
         final JFreeChart chart = ChartFactory.createXYLineChart(
-                "Motion Profile", 
-                "Time (sec)", 
-                "Data", 
-                series, 
-                PlotOrientation.VERTICAL, 
-                true, 
+                "Motion Profile",
+                "Time (sec)",
+                "Data",
+                aSeries,
+                PlotOrientation.VERTICAL,
+                true,
                 true,
                 false);
 
@@ -40,37 +40,36 @@ public class MotorComparision extends JPanel
         add(chartPanel);
     }
 
-    public static Map<String, XYSeries> getSeries(String prefix, String aFilename) throws IOException
+    public static Map<String, XYSeries> getSeries(String aPrefix, String aFilename) throws IOException
     {
         Map<String, XYSeries> output = new HashMap<>();
 
-        XYSeries positionSeries = new XYSeries(prefix + "Position");
-        XYSeries velocitySeries = new XYSeries(prefix + "Velocity");
-        XYSeries currentSeries = new XYSeries(prefix + "Current");
+        XYSeries positionSeries = new XYSeries(aPrefix + "Position");
+        XYSeries velocitySeries = new XYSeries(aPrefix + "Velocity");
+        XYSeries currentSeries = new XYSeries(aPrefix + "Current");
 
         output.put("Position", positionSeries);
         output.put("Velocity", velocitySeries);
         output.put("Current", currentSeries);
 
-        BufferedReader br = new BufferedReader(new FileReader(aFilename));
-
-        String line;
-
-        while ((line = br.readLine()) != null)
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(aFilename), "UTF-8")))
         {
-            String[] parts = line.split(",");
+            String line;
 
-            double dt = Double.parseDouble(parts[0]);
-            double pos = Double.parseDouble(parts[1]);
-            double vel = Double.parseDouble(parts[2]);
-            double cur = Double.parseDouble(parts[3]);
+            while ((line = br.readLine()) != null)
+            {
+                String[] parts = line.split(",");
 
-            positionSeries.add(dt, pos);
-            velocitySeries.add(dt, vel);
-            currentSeries.add(dt, cur);
+                double dt = Double.parseDouble(parts[0]);
+                double pos = Double.parseDouble(parts[1]);
+                double vel = Double.parseDouble(parts[2]);
+                double cur = Double.parseDouble(parts[3]);
+
+                positionSeries.add(dt, pos);
+                velocitySeries.add(dt, vel);
+                currentSeries.add(dt, cur);
+            }
         }
-
-        br.close();
 
         return output;
     }

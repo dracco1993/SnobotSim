@@ -15,6 +15,9 @@ apply plugin: 'visual-studio'
 apply plugin: 'edu.wpi.first.NativeUtils'
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
 
 apply from: '../config.gradle'
 
@@ -35,7 +38,7 @@ sourceSets {
     }
 }
 test {
-    ignoreFailures = !OperatingSystem.current().isWindows()
+    ignoreFailures = OperatingSystem.current().isLinux()
 }
 
 task packageNativeFilesInJar(type: Jar) {
@@ -77,20 +80,12 @@ task combineNativeLibrariesIntoOne(type: Jar) {
         from(zipTree(it))
     }
     
-    def navx_path = '../sim_extension_navx/build/libs/navx_simulator/shared/'
-    from(navx_path + 'navx_simulator.dll') { 
-        into "windows/x86-64"
-    }
-    from(navx_path + 'libnavx_simulator.so') { 
-        into "linux/x86-64"
+    project(':ctre_override').packageNativeCtreFilesInJar.outputs.files.each {
+        from(zipTree(it))
     }
     
-    def ctre_path = '../ctre_override/build/libs/ctreMockHooks/shared/'
-    from(ctre_path + 'CtreMockHooks.dll') { 
-        into "windows/x86-64"
-    }
-    from(ctre_path + 'libCtreMockHooks.so') { 
-        into "linux/x86-64"
+    project(':sim_extension_navx').packageNativeNavxFilesInJar.outputs.files.each {
+        from(zipTree(it))
     }
 }
 build.dependsOn packageNativeFilesInJar
@@ -106,7 +101,8 @@ dependencies {
     compile project(":snobot_sim_utilities")
     compile 'edu.wpi.first.ntcore:ntcore-java:' + getNtCoreVersion()
     compile 'edu.wpi.first.cscore:cscore-java:' + getCsCoreVersion()
-    compile group: 'log4j', name: 'log4j', version: '1.2.16'
+    compile 'org.apache.logging.log4j:log4j-api:2.11.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.0'
     
     testCompile 'junit:junit:4.12'
     testCompile 'edu.wpi.first.wpilibj:wpilibj-java:' + getWpilibjVersion()
@@ -230,7 +226,33 @@ model {
 }
 
 tasks.withType(Test) {
-    systemProperty "java.library.path", "$rootDir/ctre_override/build/libs/ctrePhoenixJava/shared"
+    systemProperty "java.library.path", "$rootDir/ctre_override/build/libs/ctrePhoenixJava/shared/x86-64"
 }
+
+/////////////////////////////////////////////////////////////////////////////////
+// Style/Formatting stuff
+checkstyle {
+    toolVersion = "8.1"
+    configFile = new File(rootDir, "styleguide/checkstyle.xml")
+}
+
+pmd {
+    consoleOutput  = true
+    reportsDir = file("${project.buildDir}/reports/pmd")
+    ruleSetFiles = files(file("$rootDir/styleguide/pmd-ruleset.xml"))
+    ruleSets = []
+}
+
+findbugs {
+    excludeFilter = file("$rootDir/styleguide/findbugs_suppressions.xml")
+    effort = "max"
+}
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////
 
 apply from: "publish.gradle"

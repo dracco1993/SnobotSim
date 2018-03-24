@@ -5,23 +5,23 @@
  *      Author: PJ
  */
 
-#ifndef SRC_SNOBOTSIM_MODULEWRAPPER_AMODULEWRAPPER_H_
-#define SRC_SNOBOTSIM_MODULEWRAPPER_AMODULEWRAPPER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_AMODULEWRAPPER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_AMODULEWRAPPER_H_
 
 #include <string>
+
 #include "SnobotSim/ExportHelper.h"
 
 class AModuleWrapper
 {
 public:
-    AModuleWrapper(const std::string& aName) :
-            mName(aName), mWantsHidden(false)
+    explicit AModuleWrapper(const std::string& aName) :
+            mName(aName),
+            mWantsHidden(false)
     {
-
     }
     virtual ~AModuleWrapper()
     {
-
     }
 
     const std::string& GetName()
@@ -45,9 +45,8 @@ public:
     }
 
 protected:
-
     std::string mName;
     bool mWantsHidden;
 };
 
-#endif /* SRC_SNOBOTSIM_MODULEWRAPPER_AMODULEWRAPPER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_AMODULEWRAPPER_H_

@@ -5,13 +5,15 @@
  *      Author: PJ
  */
 
-#ifndef DCMOTORMODELCONFIG_H_
-#define DCMOTORMODELCONFIG_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORSIM_DCMOTORMODELCONFIG_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORSIM_DCMOTORMODELCONFIG_H_
 
 #include <string>
+
 #include "SnobotSim/ExportHelper.h"
 
-struct EXPORT_ DcMotorModelConfig {
+struct EXPORT_ DcMotorModelConfig
+{
 public:
     struct FactoryParams
     {
@@ -21,25 +23,24 @@ public:
         double mTransmissionEfficiency;
 
         FactoryParams() :
-            mMotorName(""),
-            mNumMotors(0),
-            mGearReduction(0),
-            mTransmissionEfficiency(0)
+                mMotorName(""),
+                mNumMotors(0),
+                mGearReduction(0),
+                mTransmissionEfficiency(0)
         {
-
         }
     };
 
     DcMotorModelConfig(
             const FactoryParams& aFactoryParams,
-            double aNominalVoltage, 
-            double aFreeSpeedRpm, 
-            double aFreeCurrent, 
-            double aStallTorque, 
+            double aNominalVoltage,
+            double aFreeSpeedRpm,
+            double aFreeCurrent,
+            double aStallTorque,
             double aStallCurrent,
             double aMotorInertia,
-            bool aHasBrake=false,
-            bool aInverted=false);
+            bool aHasBrake = false,
+            bool aInverted = false);
 
     DcMotorModelConfig(
             const FactoryParams& aFactoryParams,
@@ -56,7 +57,7 @@ public:
             double aKT,
             double aKV,
             double aResistance);
-            
+
     virtual ~DcMotorModelConfig();
 
     FactoryParams mFactoryParams;
@@ -79,4 +80,4 @@ public:
     bool mHasBrake;
 };
 
-#endif /* DCMOTORMODELCONFIG_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORSIM_DCMOTORMODELCONFIG_H_

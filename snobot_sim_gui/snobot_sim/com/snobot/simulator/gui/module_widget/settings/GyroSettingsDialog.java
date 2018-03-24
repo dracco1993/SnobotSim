@@ -11,19 +11,19 @@ import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 
 public class GyroSettingsDialog extends SimpleSettingsDialog
 {
-    protected JComboBox<SpeedControllerOption> mSpeedControllerSelection;
+    protected JComboBox<SensorHandleOption> mSpeedControllerSelection;
 
     public GyroSettingsDialog(String aTitle, int aKey, String aName)
     {
         super(aTitle, aKey, aName);
 
         mSpeedControllerSelection = new JComboBox<>();
-        mSpeedControllerSelection.addItem(new SpeedControllerOption(-1, "None"));
+        mSpeedControllerSelection.addItem(new SensorHandleOption(-1, "None"));
 
         List<Integer> speedControllers = DataAccessorFactory.getInstance().getGyroAccessor().getPortList();
         for (int handle : speedControllers)
         {
-            SpeedControllerOption option = new SpeedControllerOption(handle, DataAccessorFactory.getInstance().getGyroAccessor().getName(handle));
+            SensorHandleOption option = new SensorHandleOption(handle, DataAccessorFactory.getInstance().getGyroAccessor().getName(handle));
             mSpeedControllerSelection.addItem(option);
         }
 
@@ -34,17 +34,11 @@ public class GyroSettingsDialog extends SimpleSettingsDialog
     }
 
     @Override
-    public void setVisible(boolean aVisible)
-    {
-        super.setVisible(aVisible);
-    }
-
-    @Override
     protected void onSubmit()
     {
-        SpeedControllerOption option = (SpeedControllerOption) mSpeedControllerSelection.getSelectedItem();
-        int scId = option == null ? -1 : option.mHandle;
-
+        // SensorHandleOption option = (SensorHandleOption) mSpeedControllerSelection.getSelectedItem();
+        // int scId = option == null ? -1 : option.mHandle;
+        //
         // EncoderWrapperJni.connectSpeedController(mHandle, scId);
     }
 

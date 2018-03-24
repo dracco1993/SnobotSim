@@ -12,8 +12,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.snobot.simulator.config.SimulatorConfigWriter;
 import com.snobot.simulator.gui.joysticks.JoystickManagerDialog;
@@ -21,13 +22,13 @@ import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 
 /**
  * Top level frame that displays all of the simulation displays
- * 
+ *
  * @author PJ
  *
  */
 public class SimulatorFrame extends JFrame
 {
-    private static final Logger sLOGGER = Logger.getLogger(SimulatorFrame.class);
+    private static final Logger sLOGGER = LogManager.getLogger(SimulatorFrame.class);
 
     private GraphicalSensorDisplayPanel mBasicPanel;
     private EnablePanel mEnablePanel;
@@ -43,7 +44,7 @@ public class SimulatorFrame extends JFrame
     public void updateLoop()
     {
         mBasicPanel.update();
-        mEnablePanel.setTime(DataAccessorFactory.getInstance().getSimulatorDataAccessor().getMatchTime());
+        mEnablePanel.setTime(DataAccessorFactory.getInstance().getSimulatorDataAccessor().getTimeSinceEnabled());
     }
 
     private void initComponenents()
@@ -55,7 +56,7 @@ public class SimulatorFrame extends JFrame
         {
 
             @Override
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent aEvent)
             {
                 DataAccessorFactory.getInstance().getSimulatorDataAccessor().setDisabled(!mEnablePanel.isEnabled());
                 DataAccessorFactory.getInstance().getSimulatorDataAccessor().setAutonomous(mEnablePanel.isAuton());
@@ -67,7 +68,7 @@ public class SimulatorFrame extends JFrame
         {
 
             @Override
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent aEvent)
             {
                 showJoystickDialog();
             }
@@ -80,7 +81,7 @@ public class SimulatorFrame extends JFrame
         {
 
             @Override
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent aEvent)
             {
                 changeSettingsBtn.setVisible(false);
                 saveSettingsBtn.setVisible(true);
@@ -93,7 +94,7 @@ public class SimulatorFrame extends JFrame
         {
 
             @Override
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent aEvent)
             {
                 changeSettingsBtn.setVisible(true);
                 saveSettingsBtn.setVisible(false);
@@ -110,14 +111,14 @@ public class SimulatorFrame extends JFrame
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(configureJoystickBtn, BorderLayout.NORTH);
         buttonPanel.add(settingsPanel, BorderLayout.SOUTH);
-        
-        JScrollPane scrollPane = new JScrollPane(mBasicPanel);
+
 
         JPanel driverStationPanel = new JPanel();
         driverStationPanel.setLayout(new BoxLayout(driverStationPanel, BoxLayout.Y_AXIS));
         driverStationPanel.add(mEnablePanel);
         driverStationPanel.add(new GameSpecificDataPanel());
 
+        JScrollPane scrollPane = new JScrollPane(mBasicPanel);
         add(scrollPane, BorderLayout.CENTER);
         add(driverStationPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -132,14 +133,14 @@ public class SimulatorFrame extends JFrame
     private void saveSettings()
     {
         SimulatorConfigWriter writer = new SimulatorConfigWriter();
-        
+
         String dumpFile = null;
-        
-        if(mSimulatorConfigFile == null)
+
+        if (mSimulatorConfigFile == null)
         {
             JFileChooser fc = new JFileChooser(".");
             int result = fc.showSaveDialog(this);
-            if(result == JFileChooser.APPROVE_OPTION)
+            if (result == JFileChooser.APPROVE_OPTION)
             {
                 dumpFile = fc.getSelectedFile().toString();
             }
@@ -148,8 +149,12 @@ public class SimulatorFrame extends JFrame
         {
             dumpFile = mSimulatorConfigFile;
         }
-        
-        if(dumpFile != null)
+
+        if (dumpFile == null)
+        {
+            sLOGGER.log(Level.INFO, "User cancelled save!");
+        }
+        else
         {
             sLOGGER.log(Level.INFO, "Saving to '" + dumpFile + "'");
             if (mSimulatorConfigFile == null)
@@ -162,11 +167,7 @@ public class SimulatorFrame extends JFrame
 
             writer.writeConfig(dumpFile);
         }
-        else
-        {
-            sLOGGER.log(Level.INFO, "User cancelled save!");
-        }
-        
+
         showSettingsOptions(false);
     }
 

@@ -4,14 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
-import java.util.Map.Entry;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.snobot.simulator.gui.joysticks.sub_panels.RawJoystickPanel;
 import com.snobot.simulator.gui.joysticks.sub_panels.WrappedJoystickPanel;
@@ -26,7 +26,7 @@ import net.java.games.input.Controller.Type;
 
 public class JoystickTabPanel extends JPanel
 {
-    private static final Logger sLOGGER = Logger.getLogger(JoystickTabPanel.class);
+    private static final Logger sLOGGER = LogManager.getLogger(JoystickTabPanel.class);
 
     private RawJoystickPanel mRawPanel;
 
@@ -34,8 +34,8 @@ public class JoystickTabPanel extends JPanel
     private WrappedJoystickPanel mWrappedPanel;
     private XboxPanel mXboxPanel;
 
-    private Controller mController;
-    private String mJoystickName;
+    private final Controller mController;
+    private final String mJoystickName;
 
     public JoystickTabPanel(String aJoystickName, Controller aController, Class<?> aDefaultSpecialization) throws IOException
     {
@@ -44,9 +44,9 @@ public class JoystickTabPanel extends JPanel
 
         initComponents();
 
-        if (JoystickDiscoverer.sAVAILABLE_SPECIALIZATIONS.containsKey(aDefaultSpecialization))
+        if (JoystickDiscoverer.getSpecializationTypes().contains(aDefaultSpecialization))
         {
-            mSelectInterperetTypeBox.setSelectedItem(JoystickDiscoverer.sAVAILABLE_SPECIALIZATIONS.get(aDefaultSpecialization));
+            mSelectInterperetTypeBox.setSelectedItem(JoystickDiscoverer.getSpecialization(aDefaultSpecialization));
             handleWrapperSelected(mSelectInterperetTypeBox.getSelectedItem().toString());
         }
         else
@@ -86,7 +86,7 @@ public class JoystickTabPanel extends JPanel
         }
         else
         {
-            for (String name : JoystickDiscoverer.sAVAILABLE_SPECIALIZATIONS.values())
+            for (String name : JoystickDiscoverer.getJoystickNames())
             {
                 mSelectInterperetTypeBox.addItem(name);
             }
@@ -96,11 +96,11 @@ public class JoystickTabPanel extends JPanel
         {
 
             @Override
-            public void itemStateChanged(ItemEvent e)
+            public void itemStateChanged(ItemEvent aEvent)
             {
-                if (e.getStateChange() == ItemEvent.SELECTED)
+                if (aEvent.getStateChange() == ItemEvent.SELECTED)
                 {
-                    handleWrapperSelected(e.getItem().toString());
+                    handleWrapperSelected(aEvent.getItem().toString());
                 }
             }
         });
@@ -111,14 +111,15 @@ public class JoystickTabPanel extends JPanel
         IMockJoystick wrappedJoystick = null;
 
         // Assuming values are unique as well as keys
-        for (Entry<Class<? extends IMockJoystick>, String> pair : JoystickDiscoverer.sAVAILABLE_SPECIALIZATIONS.entrySet())
+        for (Class<? extends IMockJoystick> specializationType : JoystickDiscoverer.getSpecializationTypes())
         {
-            if (pair.getValue().equals(aType))
+            String value = JoystickDiscoverer.getSpecialization(specializationType);
+            if (value.equals(aType))
             {
                 try
                 {
-                    JoystickFactory.get().setSpecialization(mJoystickName, pair.getKey());
-                    wrappedJoystick = pair.getKey().getDeclaredConstructor(Controller.class).newInstance(mController);
+                    JoystickFactory.getInstance().setSpecialization(mJoystickName, specializationType);
+                    wrappedJoystick = specializationType.getDeclaredConstructor(Controller.class).newInstance(mController);
                 }
                 catch (Exception e)
                 {

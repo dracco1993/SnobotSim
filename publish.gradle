@@ -8,35 +8,38 @@ task gatherWpiLibs(type: Zip) {
 
     classifier = "wpi_native-" + os_name;
     destinationDir = file("build")
-    
+
     from('build/dependencies/wpiutil-cpp/' + os_name + 'x86-64/' + os_name + '/x86-64/shared') {
         into "lib"
-        
+
         include "*.dll"
         include "*.lib"
         include "*.so"
+        include "*.dylib"
     }
     from('build/dependencies/ntcore-cpp/' + os_name + 'x86-64/' + os_name + '/x86-64/shared') {
         into "lib"
-    
+
         include "*.dll"
         include "*.lib"
         include "*.so"
+        include "*.dylib"
     }
     from('build/dependencies/wpilibc/lib/' + os_name + '/x86-64/shared') {
         into "lib"
-    
+
         include "*.dll"
         include "*.lib"
         include "*.so"
+        include "*.dylib"
     }
 }
-    
+
 task gatherWpiHeaders(type: Zip) {
 
     classifier = "wpi_headers";
     destinationDir = file("build")
-    
+
     from('build/dependencies/wpiutil-cpp/headers') {
         into "include"
     }
@@ -62,13 +65,16 @@ publishing {
            url maven_publishing_path
        }
     }
-    
+
 
     publications {
         wpilibCopies(MavenPublication) {
-            artifact gatherWpiLibs
+            if(!org.gradle.internal.os.OperatingSystem.current().isMacOsX())
+            {
+                artifact gatherWpiLibs
+            }
             artifact gatherWpiHeaders
-        
+
             groupId 'com.snobot.simulator'
             artifactId 'wpilib'
             version maven_version

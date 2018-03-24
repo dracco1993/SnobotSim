@@ -5,59 +5,59 @@
  *      Author: PJ
  */
 
-#ifndef BASENAVXWRAPPER_H_
-#define BASENAVXWRAPPER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_NAVXWRAPPERS_BASENAVXWRAPPER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_NAVXWRAPPERS_BASENAVXWRAPPER_H_
+
+#include <memory>
 
 #include "NavxSim/NavxSimulator.h"
-
 #include "SnobotSim/SimulatorComponents/Accelerometer/IAccelerometerWrapper.h"
 #include "SnobotSim/SimulatorComponents/Gyro/IGyroWrapper.h"
 
-class BaseNavxWrapper {
+class BaseNavxWrapper
+{
 public:
-	BaseNavxWrapper(int aBasePort, const std::shared_ptr<NavxSimulator>& aNavx);
-	virtual ~BaseNavxWrapper();
+    BaseNavxWrapper(int aBasePort, const std::shared_ptr<NavxSimulator>& aNavx);
+    virtual ~BaseNavxWrapper();
 
-	class AccelerometerWrapper : public IAccelerometerWrapper
-	{
-	public:
+    class AccelerometerWrapper : public IAccelerometerWrapper
+    {
+    public:
+        enum AxisType
+        {
+            AXIS_X,
+            AXIS_Y,
+            AXIS_Z
+        };
 
-		enum AxisType
-		{
-			AXIS_X,
-			AXIS_Y,
-			AXIS_Z
-		};
+        AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aNavx);
 
-		AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aNavx);
+        void SetAcceleration(double aAcceleration) override;
 
-	    void SetAcceleration(double aAcceleration) override;
+        double GetAcceleration() override;
 
-	    double GetAcceleration() override;
+        AxisType mAxisType;
+        std::shared_ptr<NavxSimulator> mNavx;
+    };
+    class GyroWrapper : public IGyroWrapper
+    {
+    public:
+        enum AxisType
+        {
+            AXIS_YAW,
+            AXIS_PITCH,
+            AXIS_ROLL
+        };
 
-	    AxisType mAxisType;
-	    std::shared_ptr<NavxSimulator> mNavx;
-	};
-	class GyroWrapper : public IGyroWrapper
-	{
-	public:
+        GyroWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aAccel);
 
-		enum AxisType
-		{
-			AXIS_YAW,
-			AXIS_PITCH,
-			AXIS_ROLL
-		};
+        void SetAngle(double aAngle) override;
 
-		GyroWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aAccel);
+        double GetAngle() override;
 
-	    void SetAngle(double aAngle) override;
-
-	    double GetAngle() override;
-
-	    AxisType mAxisType;
-	    std::shared_ptr<NavxSimulator> mNavx;
-	};
+        AxisType mAxisType;
+        std::shared_ptr<NavxSimulator> mNavx;
+    };
 
     std::shared_ptr<AccelerometerWrapper> mXWrapper;
     std::shared_ptr<AccelerometerWrapper> mYWrapper;
@@ -68,4 +68,4 @@ public:
     std::shared_ptr<GyroWrapper> mRollWrapper;
 };
 
-#endif /* BASENAVXWRAPPER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_NAVXWRAPPERS_BASENAVXWRAPPER_H_

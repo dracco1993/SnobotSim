@@ -7,13 +7,13 @@ import com.snobot.simulator.JniLibraryResourceLoader;
 
 /**
  * Wrapper class around a C++ robot's code
- * 
+ *
  * @author PJ
  *
  */
 public class CppRobotContainer implements IRobotClassContainer
 {
-    private String mRobotClassName;
+    private final String mRobotClassName;
     private Class<?> mJniClass;
 
     public CppRobotContainer(String aRobotClassName)

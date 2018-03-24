@@ -12,6 +12,9 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 apply plugin: 'application'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
 
 sourceSets {
     main {
@@ -63,13 +66,13 @@ dependencies {
     compile 'edu.wpi.first.cscore:cscore-jni:' + getCsCoreVersion() + ':all'
     runtime 'org.opencv:opencv-jni:' + getWpilibOpencvVersion() + ':all'
     runtime 'edu.wpi.first.ntcore:ntcore-jni:' + getNtCoreVersion() + ':all'
-    native3rdPartyDeps 'org.opencv:opencv-cpp:' + getWpilibOpencvVersion() + ':all@zip'
     
     // 3rd Party
     native3rdPartyDeps  'net.java.jinput:jinput:2.0.7'
     compile 'jfree:jcommon:1.0.16'
     compile 'jfree:jfreechart:1.0.13'
-    compile "log4j:log4j:1.2.16"
+    compile 'org.apache.logging.log4j:log4j-api:2.11.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.0'
     compile 'org.yaml:snakeyaml:1.18'
     compile 'com.miglayout:miglayout-swing:4.2'
     //compile 'org.python:jython:2.7.1b3'
@@ -108,6 +111,7 @@ task unzipNativeLibraries(type: Copy) {
         include "**/*.pdb"
         include "**/*.so*"
         include "**/*.a"
+        include "**/*.dylib*"
     }
     
     includeEmptyDirs = false
@@ -177,3 +181,31 @@ distributions {
 }
 
 ///////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////
+// Style/Formatting stuff
+checkstyle {
+    toolVersion = "8.1"
+    configFile = new File(rootDir, "styleguide/checkstyle.xml")
+}
+
+pmd {
+    consoleOutput  = true
+    reportsDir = file("${project.buildDir}/reports/pmd")
+    ruleSetFiles = files(file("$rootDir/styleguide/pmd-ruleset.xml"))
+    ruleSets = []
+}
+
+findbugs {
+    excludeFilter = file("$rootDir/styleguide/findbugs_suppressions.xml")
+    effort = "max"
+    ignoreFailures = true
+}
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////

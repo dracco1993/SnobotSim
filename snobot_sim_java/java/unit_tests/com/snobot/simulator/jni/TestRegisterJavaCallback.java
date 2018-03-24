@@ -28,13 +28,13 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class TestRegisterJavaCallback extends BaseSimulatorTest
 {
-    private void checkSizes(int analogSize, int digitalSize, int encoderSize, int pcmSize, int pdpSize, int numPwm)
+    private void checkSizes(int aAnalogSize, int aDigitalSize, int aEncoderSize, int aPcmSize, int aPdpSize, int aNumPwm)
     {
-        Assert.assertEquals(analogSize, SensorActuatorRegistry.get().getAnalog().size());
-        Assert.assertEquals(digitalSize, SensorActuatorRegistry.get().getDigitalSources().size());
-        Assert.assertEquals(encoderSize, SensorActuatorRegistry.get().getEncoders().size());
-        Assert.assertEquals(pcmSize, SensorActuatorRegistry.get().getSolenoids().size());
-        Assert.assertEquals(numPwm, SensorActuatorRegistry.get().getSpeedControllers().size());
+        Assert.assertEquals(aAnalogSize, SensorActuatorRegistry.get().getAnalog().size());
+        Assert.assertEquals(aDigitalSize, SensorActuatorRegistry.get().getDigitalSources().size());
+        Assert.assertEquals(aEncoderSize, SensorActuatorRegistry.get().getEncoders().size());
+        Assert.assertEquals(aPcmSize, SensorActuatorRegistry.get().getSolenoids().size());
+        Assert.assertEquals(aNumPwm, SensorActuatorRegistry.get().getSpeedControllers().size());
     }
 
     @Test
@@ -68,17 +68,18 @@ public class TestRegisterJavaCallback extends BaseSimulatorTest
     @Test
     public void testUnsupportedOptions()
     {
-        AnalogCallbackJni.analogCallback("DoesntExist", 0, null);
-        AnalogGyroCallbackJni.analogGyroCallback("DoesntExist", 0, null);
-        DigitalCallbackJni.digitalCallback("DoesntExist", 0, null);
-        EncoderCallbackJni.encoderCallback("DoesntExist", 0, null);
-        I2CCallbackJni.i2cCallback("DoesntExist", 0, (HalCallbackValue) null);
-        I2CCallbackJni.i2cCallback("DoesntExist", 0, ByteBuffer.allocate(5));
-        PcmCallbackJni.pcmCallback("DoesntExist", 0, null);
-        PdpCallbackJni.pdpCallback("DoesntExist", 0, null);
-        PwmCallbackJni.pwmCallback("DoesntExist", 0, null);
-        RelayCallbackJni.relayCallback("DoesntExist", 0, null);
-        SpiCallbackJni.spiCallback("DoesntExist", 0, (HalCallbackValue) null);
-        SpiCallbackJni.spiCallback("DoesntExist", 0, ByteBuffer.allocate(5));
+        String doesntExistString = "DoesntExist";
+        AnalogCallbackJni.analogCallback(doesntExistString, 0, null);
+        AnalogGyroCallbackJni.analogGyroCallback(doesntExistString, 0, null);
+        DigitalCallbackJni.digitalCallback(doesntExistString, 0, null);
+        EncoderCallbackJni.encoderCallback(doesntExistString, 0, null);
+        I2CCallbackJni.i2cCallback(doesntExistString, 0, (HalCallbackValue) null);
+        I2CCallbackJni.i2cCallback(doesntExistString, 0, ByteBuffer.allocate(5));
+        PcmCallbackJni.pcmCallback(doesntExistString, 0, null);
+        PdpCallbackJni.pdpCallback(doesntExistString, 0, null);
+        PwmCallbackJni.pwmCallback(doesntExistString, 0, null);
+        RelayCallbackJni.relayCallback(doesntExistString, 0, null);
+        SpiCallbackJni.spiCallback(doesntExistString, 0, (HalCallbackValue) null);
+        SpiCallbackJni.spiCallback(doesntExistString, 0, ByteBuffer.allocate(5));
     }
 }

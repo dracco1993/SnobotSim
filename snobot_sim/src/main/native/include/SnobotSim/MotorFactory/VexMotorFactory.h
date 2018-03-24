@@ -5,16 +5,18 @@
  *      Author: preiniger
  */
 
-#ifndef SRC_VEXMOTORFACTORY_H_
-#define SRC_VEXMOTORFACTORY_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORFACTORY_VEXMOTORFACTORY_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORFACTORY_VEXMOTORFACTORY_H_
+
+#include <string>
 
 #include "SnobotSim/MotorSim/DcMotorModelConfig.h"
-#include <string>
 
 class EXPORT_ VexMotorFactory
 {
 private:
     VexMotorFactory();
+
 public:
     virtual ~VexMotorFactory();
 
@@ -37,4 +39,4 @@ public:
     static const std::string MOTOR_NAME_RS775;
 };
 
-#endif /* SRC_VEXMOTORFACTORY_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MOTORFACTORY_VEXMOTORFACTORY_H_

@@ -2,8 +2,9 @@ package com.snobot.simulator.wrapper_accessors.java;
 
 import java.util.Map;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.snobot.simulator.SensorActuatorRegistry;
 import com.snobot.simulator.module_wrapper.PwmWrapper;
@@ -22,7 +23,9 @@ import com.snobot.simulator.wrapper_accessors.SpeedControllerWrapperAccessor;
 
 public class JavaSpeedControllerWrapperAccessor extends BaseWrapperAccessor<PwmWrapper> implements SpeedControllerWrapperAccessor
 {
-    private static final Logger sLOGGER = Logger.getLogger(JavaSpeedControllerWrapperAccessor.class);
+    private static final Logger sLOGGER = LogManager.getLogger(JavaSpeedControllerWrapperAccessor.class);
+
+    private static final String sWRONG_SIMULATOR_TYPE_ERROR = "Wrong simulator type, returning default";
 
     @Override
     protected Map<Integer, PwmWrapper> getMap()
@@ -46,7 +49,7 @@ public class JavaSpeedControllerWrapperAccessor extends BaseWrapperAccessor<PwmW
             return simulator.getConfig();
         }
 
-        sLOGGER.log(Level.DEBUG, "Wrong simulator type, returning default");
+        sLOGGER.log(Level.DEBUG, sWRONG_SIMULATOR_TYPE_ERROR);
         return new SimpleMotorSimulationConfig(0);
     }
 
@@ -60,7 +63,7 @@ public class JavaSpeedControllerWrapperAccessor extends BaseWrapperAccessor<PwmW
             return simulator.getConfig();
         }
 
-        sLOGGER.log(Level.DEBUG, "Wrong simulator type, returning default");
+        sLOGGER.log(Level.DEBUG, sWRONG_SIMULATOR_TYPE_ERROR);
         return new StaticLoadMotorSimulationConfig(0);
     }
 
@@ -74,7 +77,7 @@ public class JavaSpeedControllerWrapperAccessor extends BaseWrapperAccessor<PwmW
             return simulator.getConfig();
         }
 
-        sLOGGER.log(Level.DEBUG, "Wrong simulator type, returning default");
+        sLOGGER.log(Level.DEBUG, sWRONG_SIMULATOR_TYPE_ERROR);
         return new GravityLoadMotorSimulationConfig(0);
     }
 
@@ -88,7 +91,7 @@ public class JavaSpeedControllerWrapperAccessor extends BaseWrapperAccessor<PwmW
             return simulator.getConfig();
         }
 
-        sLOGGER.log(Level.DEBUG, "Wrong simulator type, returning default");
+        sLOGGER.log(Level.DEBUG, sWRONG_SIMULATOR_TYPE_ERROR);
         return new RotationalLoadMotorSimulationConfig(0, 0);
     }
 

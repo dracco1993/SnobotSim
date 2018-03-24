@@ -21,14 +21,14 @@ import com.snobot.simulator.motor_sim.DcMotorModelConfig;
 
 public class MotorCurveDisplay extends JPanel
 {
-    private ValueMarker mRpmMarker;
+    private final ValueMarker mRpmMarker;
 
     protected final XYSeries mCurrentPoints;
     protected final XYSeries mTorquePoints;
     protected final XYSeries mPowerPoints;
     protected final XYSeries mEfficiencyPoints;
     protected final JFreeChart mChart;
-    
+
     protected final int mNumPoints;
 
     public MotorCurveDisplay()
@@ -47,11 +47,11 @@ public class MotorCurveDisplay extends JPanel
         series.addSeries(mEfficiencyPoints);
 
         mChart = ChartFactory.createXYLineChart(
-                "Unknown Motor", 
-                "RPM", 
-                "Data", 
-                series, 
-                PlotOrientation.VERTICAL, true, 
+                "Unknown Motor",
+                "RPM",
+                "Data",
+                series,
+                PlotOrientation.VERTICAL, true,
                 true,
                 false);
 
@@ -75,7 +75,7 @@ public class MotorCurveDisplay extends JPanel
                 aModel.mMotorParams.STALL_CURRENT, aModel.mMotorParams.FREE_CURRENT, aModel.mMotorParams.STALL_TORQUE);
     }
 
-    public void setCurveParams(String motorName, double aNominalVoltage, double aFreeSpeedRpm, double aStallCurrent, double aFreeCurrent, double aStallTorque)
+    public void setCurveParams(String aMotorName, double aNominalVoltage, double aFreeSpeedRpm, double aStallCurrent, double aFreeCurrent, double aStallTorque)
     {
         SwingUtilities.invokeLater(new Runnable()
         {
@@ -83,7 +83,7 @@ public class MotorCurveDisplay extends JPanel
             @Override
             public void run()
             {
-                mChart.setTitle(motorName);
+                mChart.setTitle(aMotorName);
 
                 mCurrentPoints.clear();
                 mTorquePoints.clear();
@@ -106,22 +106,22 @@ public class MotorCurveDisplay extends JPanel
             }
         });
     }
-    
-    private void addPoint(
-            double aNominalVoltage, double aStallCurrent, double aStallTorque, 
-            int rpm, double currentSlope, double torqueSlope)
-    {
-        double omega = 2 * rpm * Math.PI / 60;
-        double current = aStallCurrent + rpm * currentSlope;
-        double torque = aStallTorque + rpm * torqueSlope;
-        double input_power = aNominalVoltage * current;
-        double output_power = torque * omega;
-        double efficiency = output_power / input_power * 100;
 
-        mCurrentPoints.add(rpm, current);
-        mTorquePoints.add(rpm, torque);
-        mPowerPoints.add(rpm, output_power);
-        mEfficiencyPoints.add(rpm, efficiency);
+    private void addPoint(
+            double aNominalVoltage, double aStallCurrent, double aStallTorque,
+            int aRpm, double aCurrentSlope, double aTorqueSlope)
+    {
+        final double omega = 2 * aRpm * Math.PI / 60;
+        final double current = aStallCurrent + aRpm * aCurrentSlope;
+        final double torque = aStallTorque + aRpm * aTorqueSlope;
+        final double inputPower = aNominalVoltage * current;
+        final double outputPower = torque * omega;
+        final double efficiency = outputPower / inputPower * 100;
+
+        mCurrentPoints.add(aRpm, current);
+        mTorquePoints.add(aRpm, torque);
+        mPowerPoints.add(aRpm, outputPower);
+        mEfficiencyPoints.add(aRpm, efficiency);
     }
 
     public void setCurrentRpm(double aRpm)

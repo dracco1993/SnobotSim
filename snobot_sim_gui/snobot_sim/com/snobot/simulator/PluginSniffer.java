@@ -11,25 +11,26 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * Class that loads any of the jar files in the plugin directory. Also can
  * search for C++/Java robot classes
- * 
+ *
  * @author PJ
  *
  */
 public class PluginSniffer
 {
-    private static final Logger sLOGGER = Logger.getLogger(PluginSniffer.class);
+    private static final Logger sLOGGER = LogManager.getLogger(PluginSniffer.class);
 
     private File[] mDiscoveredJars;
-    private List<Class<?>> mCppRobots;
-    private List<Class<?>> mJavaRobots;
+    private final List<Class<?>> mCppRobots;
+    private final List<Class<?>> mJavaRobots;
 
     public PluginSniffer()
     {
@@ -40,7 +41,7 @@ public class PluginSniffer
     /**
      * Gets the list of C++ robots discovered. Note: Must call
      * {@link findRobots} before this list gets populated
-     * 
+     *
      * @return The C++ robots
      */
     public List<Class<?>> getCppRobots()
@@ -51,7 +52,7 @@ public class PluginSniffer
     /**
      * Gets the list of Java robots discovered. Note: Must call
      * {@link findRobots} before this list gets populated
-     * 
+     *
      * @return The Java robots
      */
     public List<Class<?>> getJavaRobots()
@@ -61,21 +62,21 @@ public class PluginSniffer
 
     /**
      * Loads all the plugins in the plugin directory. Does not search recursivly
-     * 
-     * @param pluginDir
+     *
+     * @param aPluginDir
      *            The directory to search.
      * @throws Exception
      *             Thrown if the plugin loading fails
      */
-    public void loadPlugins(File pluginDir) throws Exception
+    public void loadPlugins(File aPluginDir) throws Exception
     {
-        sLOGGER.log(Level.INFO, "Searching for robot plugins in " + pluginDir.getAbsolutePath());
-        mDiscoveredJars = pluginDir.listFiles(new FilenameFilter()
+        sLOGGER.log(Level.INFO, "Searching for robot plugins in " + aPluginDir.getAbsolutePath());
+        mDiscoveredJars = aPluginDir.listFiles(new FilenameFilter()
         {
 
-            public boolean accept(File dir, String name)
+            public boolean accept(File aDir, String aName)
             {
-                return name.endsWith(".jar");
+                return aName.endsWith(".jar");
             }
         });
 
@@ -95,7 +96,7 @@ public class PluginSniffer
 
     /**
      * Finds any robot classes available in the plugin directory
-     * 
+     *
      * @throws Exception
      *             Thrown if the plugin loading fails
      */
@@ -110,9 +111,9 @@ public class PluginSniffer
         }
     }
 
-    private void findRobots(File file) throws Exception
+    private void findRobots(File aFile) throws Exception
     {
-        JarFile jar = new JarFile(file);
+        JarFile jar = new JarFile(aFile);
 
         Enumeration<JarEntry> entries = jar.entries();
         while (entries.hasMoreElements())
@@ -128,7 +129,7 @@ public class PluginSniffer
                 Class<?> clazz = Class.forName(name);
                 if (name.startsWith("com.snobot.simulator.cpp_wrapper."))
                 {
-                    tryToAddCppRobot(file, clazz, name);
+                    tryToAddCppRobot(aFile, clazz, name);
                 }
                 else if (RobotBase.class.isAssignableFrom(clazz))
                 {
@@ -142,24 +143,25 @@ public class PluginSniffer
 
     }
 
-    private void tryToAddCppRobot(File file, Class<?> clazz, String name) throws ClassNotFoundException
+    private void tryToAddCppRobot(File aFile, Class<?> aClazz, String aWName) throws ClassNotFoundException
+
     {
 
         try
         {
-            Method createRobotMethod = clazz.getMethod("createRobot");
-            Method getLibraryNameMethod = clazz.getMethod("getLibraryName");
-            Method startCompetitionMethod = clazz.getMethod("startCompetition");
+            Method createRobotMethod = aClazz.getMethod("createRobot");
+            Method getLibraryNameMethod = aClazz.getMethod("getLibraryName");
+            Method startCompetitionMethod = aClazz.getMethod("startCompetition");
 
             if (createRobotMethod != null && getLibraryNameMethod != null && startCompetitionMethod != null)
             {
-                mCppRobots.add(clazz);
+                mCppRobots.add(aClazz);
             }
         }
         catch (Exception e)
         {
             sLOGGER.log(Level.WARN,
-                    "Thought we had a C++ robot in " + file + ", but couldn't find required items: " + e.getMessage(), e);
+                    "Thought we had a C++ robot in " + aFile + ", but couldn't find required items: " + e.getMessage(), e);
         }
     }
 }

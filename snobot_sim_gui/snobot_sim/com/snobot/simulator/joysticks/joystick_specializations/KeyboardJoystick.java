@@ -2,8 +2,9 @@ package com.snobot.simulator.joysticks.joystick_specializations;
 
 import java.util.Arrays;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.snobot.simulator.gui.joysticks.sub_panels.XboxButtonMap;
 import com.snobot.simulator.joysticks.BaseJoystick;
@@ -13,7 +14,7 @@ import net.java.games.input.Controller;
 
 public class KeyboardJoystick extends BaseJoystick
 {
-    private static final Logger sLOGGER = Logger.getLogger(KeyboardJoystick.class);
+    private static final Logger sLOGGER = LogManager.getLogger(KeyboardJoystick.class);
 
     // Backwards on purpose
     private static final short sNEGATIVE_VALUE = 1;
@@ -21,30 +22,30 @@ public class KeyboardJoystick extends BaseJoystick
 
     private static final Identifier[] sAXIS = new Identifier[]
     {
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
     };
 
     private static final Identifier[] sBUTTONS = new Identifier[]
     {
-            Identifier.Key._1,
-            Identifier.Key._2,
-            Identifier.Key._3,
-            Identifier.Key._4,
-            Identifier.Key._5,
-            Identifier.Key._6,
-            Identifier.Key._7,
-            Identifier.Key._8,
-            Identifier.Key._9,
-            Identifier.Key._0,
+        Identifier.Key._1,
+        Identifier.Key._2,
+        Identifier.Key._3,
+        Identifier.Key._4,
+        Identifier.Key._5,
+        Identifier.Key._6,
+        Identifier.Key._7,
+        Identifier.Key._8,
+        Identifier.Key._9,
+        Identifier.Key._0,
     };
 
     private static final Identifier[] sPOV = new Identifier[] {
-            Identifier.Key._0,
+        Identifier.Key._0,
     };
 
     public KeyboardJoystick(Controller aController)
@@ -60,16 +61,20 @@ public class KeyboardJoystick extends BaseJoystick
     @Override
     public float[] getAxisValues()
     {
-        if (mController != null)
+        if (mController == null)
+        {
+            sLOGGER.log(Level.ERROR, "Controller is null.  The simulator could not setup a controller of type [" + mName + "]");
+        }
+        else
         {
             mController.poll();
 
             // Left Y
-            if (mController.getComponent(Identifier.Key.W).getPollData() != 0)
+            if (mController.getComponent(Identifier.Key.W).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.LEFT_Y_AXIS] = sPOSITIVE_VALUE;
             }
-            else if (mController.getComponent(Identifier.Key.S).getPollData() != 0)
+            else if (mController.getComponent(Identifier.Key.S).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.LEFT_Y_AXIS] = sNEGATIVE_VALUE;
             }
@@ -79,11 +84,11 @@ public class KeyboardJoystick extends BaseJoystick
             }
 
             // Left X
-            if (mController.getComponent(Identifier.Key.A).getPollData() != 0)
+            if (mController.getComponent(Identifier.Key.A).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.LEFT_X_AXIS] = sPOSITIVE_VALUE;
             }
-            else if (mController.getComponent(Identifier.Key.D).getPollData() != 0)
+            else if (mController.getComponent(Identifier.Key.D).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.LEFT_X_AXIS] = sNEGATIVE_VALUE;
             }
@@ -93,11 +98,11 @@ public class KeyboardJoystick extends BaseJoystick
             }
 
             // Right Y
-            if (mController.getComponent(Identifier.Key.I).getPollData() != 0)
+            if (mController.getComponent(Identifier.Key.I).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.RIGHT_Y_AXIS] = sPOSITIVE_VALUE;
             }
-            else if (mController.getComponent(Identifier.Key.K).getPollData() != 0)
+            else if (mController.getComponent(Identifier.Key.K).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.RIGHT_Y_AXIS] = sNEGATIVE_VALUE;
             }
@@ -107,11 +112,11 @@ public class KeyboardJoystick extends BaseJoystick
             }
 
             // Right X
-            if (mController.getComponent(Identifier.Key.J).getPollData() != 0)
+            if (mController.getComponent(Identifier.Key.J).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.RIGHT_X_AXIS] = sPOSITIVE_VALUE;
             }
-            else if (mController.getComponent(Identifier.Key.L).getPollData() != 0)
+            else if (mController.getComponent(Identifier.Key.L).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.RIGHT_X_AXIS] = sNEGATIVE_VALUE;
             }
@@ -121,7 +126,7 @@ public class KeyboardJoystick extends BaseJoystick
             }
 
             // Left Trigger
-            if (mController.getComponent(Identifier.Key.C).getPollData() != 0)
+            if (mController.getComponent(Identifier.Key.C).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.LEFT_TRIGGER] = sPOSITIVE_VALUE;
             }
@@ -131,7 +136,7 @@ public class KeyboardJoystick extends BaseJoystick
             }
 
             // Right Trigger
-            if (mController.getComponent(Identifier.Key.N).getPollData() != 0)
+            if (mController.getComponent(Identifier.Key.N).getPollData() != 0) // NOPMD
             {
                 mAxisValues[XboxButtonMap.RIGHT_TRIGGER] = sPOSITIVE_VALUE;
             }
@@ -139,11 +144,6 @@ public class KeyboardJoystick extends BaseJoystick
             {
                 mAxisValues[XboxButtonMap.RIGHT_TRIGGER] = sNEGATIVE_VALUE;
             }
-        }
-        else
-        {
-            sLOGGER.log(Level.ERROR,
-                    "Controller is null.  The simulator could not setup a controller of type [" + mName + "]");
         }
 
         return mAxisValues;

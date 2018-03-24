@@ -15,7 +15,6 @@ import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 
 public class DigitalSourceGraphicDisplay extends BaseWidgetDisplay<Integer, DigitalSourceWrapperDisplay>
 {
-
     public DigitalSourceGraphicDisplay(Collection<Integer> aKeys)
     {
         super(aKeys);
@@ -84,10 +83,10 @@ class DigitalSourceWrapperDisplay extends JPanel
     }
 
     @Override
-    public void paint(Graphics g)
+    public void paint(Graphics aGraphics)
     {
-        g.clearRect(0, 0, getWidth(), getHeight());
-        g.setColor(mState ? Color.green : Color.red);
-        g.fillOval(0, 0, sDOT_SIZE, sDOT_SIZE);
+        aGraphics.clearRect(0, 0, getWidth(), getHeight());
+        aGraphics.setColor(mState ? Color.green : Color.red);
+        aGraphics.fillOval(0, 0, sDOT_SIZE, sDOT_SIZE);
     }
 }

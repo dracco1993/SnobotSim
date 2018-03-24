@@ -14,8 +14,7 @@ public abstract class SimpleSettingsDialog extends JDialog
 {
     protected int mHandle;
 
-    private JTextField mNameField;
-    private JButton mSubmitButton;
+    private final JTextField mNameField;
 
     public SimpleSettingsDialog(String aTitle, int aHandle, String aName)
     {
@@ -23,23 +22,24 @@ public abstract class SimpleSettingsDialog extends JDialog
 
         mHandle = aHandle;
         mNameField = new JTextField(aName, 20);
-        mSubmitButton = new JButton("Submit");
 
         JPanel namePanel = new JPanel();
         namePanel.add(new JLabel("Display Name"));
         namePanel.add(mNameField);
-        
+
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.add(namePanel, BorderLayout.NORTH);
-        contentPane.add(mSubmitButton, BorderLayout.SOUTH);
+
+        JButton submitButton = new JButton("Submit");
+        contentPane.add(submitButton, BorderLayout.SOUTH);
 
         setContentPane(contentPane);
 
-        mSubmitButton.addActionListener(new ActionListener()
+        submitButton.addActionListener(new ActionListener()
         {
 
             @Override
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent aEvent)
             {
                 onSubmit();
                 dispose();

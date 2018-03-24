@@ -6,20 +6,19 @@
  */
 
 #include "SnobotSim/ModuleWrapper/RelayWrapper.h"
+
 #include "SnobotSim/PortUnwrapper.h"
 
 RelayWrapper::RelayWrapper(int aPort) :
-        AModuleWrapper("Relay " + std::to_string(UnwrapPort(aPort))), mForwards(false), mReverse(
-                false)
+        AModuleWrapper("Relay " + std::to_string(UnwrapPort(aPort))),
+        mForwards(false),
+        mReverse(false)
 {
-
 }
 
 RelayWrapper::~RelayWrapper()
 {
-
 }
-
 
 void RelayWrapper::SetRelayForwards(bool aOn)
 {

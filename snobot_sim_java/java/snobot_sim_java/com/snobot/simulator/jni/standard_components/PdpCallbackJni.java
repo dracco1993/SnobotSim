@@ -1,32 +1,38 @@
 package com.snobot.simulator.jni.standard_components;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.snobot.simulator.jni.HalCallbackValue;
 
-public class PdpCallbackJni
+public final class PdpCallbackJni
 {
-    private static final Logger sLOGGER = Logger.getLogger(PdpCallbackJni.class);
+    private static final Logger sLOGGER = LogManager.getLogger(PdpCallbackJni.class);
 
-    public static native void registerPdpCallback(String functionName);
+    private PdpCallbackJni()
+    {
+
+    }
 
     public static native void reset();
+
+    public static native void registerPdpCallback(String aFunctionName);
 
     public static void registerPdpCallback()
     {
         registerPdpCallback("pdpCallback");
     }
 
-    public static void pdpCallback(String callbackType, int port, HalCallbackValue halValue)
+    public static void pdpCallback(String aCallbackType, int aPort, HalCallbackValue aHalValue)
     {
-        if ("Initialized".equals(callbackType))
-        {
-
+        if ("Initialized".equals(aCallbackType))
+        { // NOPMD
+            // Nothing to do
         }
         else
         {
-            sLOGGER.log(Level.ERROR, "Unknown PDP callback " + callbackType + " - " + halValue);
+            sLOGGER.log(Level.ERROR, "Unknown PDP callback " + aCallbackType + " - " + aHalValue);
         }
     }
 }

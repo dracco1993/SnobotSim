@@ -5,18 +5,18 @@
  *      Author: PJ
  */
 
-#ifndef CTREPIGEONIMUSIMULATOR_H_
-#define CTREPIGEONIMUSIMULATOR_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CTREPIGEONIMUSIMULATOR_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CTREPIGEONIMUSIMULATOR_H_
 
 #include <memory>
 
-#include "SnobotSim/SimulatorComponents/Gyro/IGyroWrapper.h"
 #include "SnobotSim/SimulatorComponents/Accelerometer/IAccelerometerWrapper.h"
+#include "SnobotSim/SimulatorComponents/Gyro/IGyroWrapper.h"
 
 class CtrePigeonImuSimulator
 {
 public:
-    CtrePigeonImuSimulator(int aPort);
+    explicit CtrePigeonImuSimulator(int aPort);
     virtual ~CtrePigeonImuSimulator();
 
     std::shared_ptr<IAccelerometerWrapper> GetXWrapper();
@@ -31,7 +31,6 @@ protected:
     class PigeonAccelWrapper : public IAccelerometerWrapper
     {
     public:
-
         PigeonAccelWrapper();
 
         virtual void SetAcceleration(double aAcceleration);
@@ -45,7 +44,6 @@ protected:
     class PigeonGyroWrapper : public IGyroWrapper
     {
     public:
-
         PigeonGyroWrapper();
 
         virtual void SetAngle(double aAngle);
@@ -65,4 +63,4 @@ protected:
     std::shared_ptr<IGyroWrapper> mRollWrapper;
 };
 
-#endif /* CTREPIGEONIMUSIMULATOR_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_SIMULATORCOMPONENTS_CTRE_CTREPIGEONIMUSIMULATOR_H_

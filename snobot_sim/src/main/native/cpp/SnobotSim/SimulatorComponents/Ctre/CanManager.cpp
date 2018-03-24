@@ -6,13 +6,13 @@
  */
 
 #include "SnobotSim/SimulatorComponents/Ctre/CanManager.h"
-#include "MockData/CanData.h"
-
-#include "SnobotSim/SimulatorComponents/Ctre/CtrePigeonImuDeviceManager.h"
-#include "SnobotSim/SimulatorComponents/Ctre/CtreTalonSrxDeviceManager.h"
-#include "SnobotSim/Logging/SnobotLogger.h"
 
 #include <cstring>
+
+#include "MockData/CanData.h"
+#include "SnobotSim/Logging/SnobotLogger.h"
+#include "SnobotSim/SimulatorComponents/Ctre/CtrePigeonImuDeviceManager.h"
+#include "SnobotSim/SimulatorComponents/Ctre/CtreTalonSrxDeviceManager.h"
 
 void CanSendMessageCallback(
         const char* name, void* param,
@@ -88,17 +88,16 @@ CanManager::~CanManager()
     HALSIM_CancelCanReadStreamCallback(mGetCanStatusCallbackId);
 }
 
-
 void CanManager::HandleSendMessage(uint32_t aCanMessageId, uint32_t aCanPort, const uint8_t* aData, uint32_t aDataSize)
 {
     IdToDeviceManagerMap_t::iterator findIter = mMessageIdToDeviceManagerMap.find(aCanMessageId);
-    if(findIter != mMessageIdToDeviceManagerMap.end())
+    if (findIter != mMessageIdToDeviceManagerMap.end())
     {
         findIter->second->HandleSend(aCanMessageId, aCanPort, aData, aDataSize);
     }
     else
     {
-    	SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown send device " << std::hex << "0x" << aCanMessageId << std::dec << ", " << aCanPort);
+        SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown send device " << std::hex << "0x" << aCanMessageId << std::dec << ", " << aCanPort);
     }
 }
 
@@ -107,20 +106,20 @@ void CanManager::HandleReceiveMessage(uint32_t aCanMessageId, uint32_t aCanPort,
     std::memset(aData, 0, 8);
 
     IdToDeviceManagerMap_t::iterator findIter = mMessageIdToDeviceManagerMap.find(aCanMessageId);
-    if(findIter != mMessageIdToDeviceManagerMap.end())
+    if (findIter != mMessageIdToDeviceManagerMap.end())
     {
         findIter->second->HandleReceive(aCanMessageId, aCanPort, aData, aOutDataSize, aOutStatus);
     }
     else
     {
-    	SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown recv device " << std::hex << "0x" << aCanMessageId << std::dec << ", " << aCanPort);
+        SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown recv device " << std::hex << "0x" << aCanMessageId << std::dec << ", " << aCanPort);
     }
 }
 
 uint32_t CanManager::HandleOpenStream(uint32_t aMessageId, uint32_t aMessageIdMask, uint32_t aMaxMessages, int32_t& aOutStatus)
 {
     IdToDeviceManagerMap_t::iterator findIter = mMessageIdToDeviceManagerMap.find(aMessageId);
-    if(findIter != mMessageIdToDeviceManagerMap.end())
+    if (findIter != mMessageIdToDeviceManagerMap.end())
     {
         uint32_t streamSession = sSTREAM_CTR++;
         mStreamIdToDeviceManagerMap[streamSession] = findIter->second;
@@ -128,7 +127,7 @@ uint32_t CanManager::HandleOpenStream(uint32_t aMessageId, uint32_t aMessageIdMa
     }
     else
     {
-    	SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown open stream device " << std::hex << "0x" << aMessageId << std::dec);
+        SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown open stream device " << std::hex << "0x" << aMessageId << std::dec);
     }
 
     return 0;
@@ -137,13 +136,13 @@ uint32_t CanManager::HandleOpenStream(uint32_t aMessageId, uint32_t aMessageIdMa
 uint32_t CanManager::HandleReadStream(uint32_t aSessionHandle, struct HAL_CANStreamMessage* aMessages, uint32_t aMessagesToRead)
 {
     IdToDeviceManagerMap_t::iterator findIter = mStreamIdToDeviceManagerMap.find(aSessionHandle);
-    if(findIter != mStreamIdToDeviceManagerMap.end())
+    if (findIter != mStreamIdToDeviceManagerMap.end())
     {
         return findIter->second->ReadStreamSession(aSessionHandle, aMessages, aMessagesToRead);
     }
     else
     {
-    	SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown read stream device " << aSessionHandle);
+        SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown read stream device " << aSessionHandle);
     }
 
     return 0;
@@ -166,7 +165,7 @@ void CanSendMessageCallback(
     uint32_t canMessageId = messageID & 0xFFFFFFC0;
     uint32_t canPort = messageID & 0x3F;
 
-    CanManager* canManager = (CanManager*) param;
+    CanManager* canManager = reinterpret_cast<CanManager*>(param);
     canManager->HandleSendMessage(canMessageId, canPort, data, dataSize);
 }
 
@@ -179,7 +178,7 @@ void CanReadMessageCallback(
     uint32_t canMessageId = (*messageID) & 0xFFFFFFC0;
     uint32_t canPort = (*messageID) & 0x3F;
 
-    CanManager* canManager = (CanManager*) param;
+    CanManager* canManager = reinterpret_cast<CanManager*>(param);
     canManager->HandleReceiveMessage(canMessageId, canPort, data, *dataSize, *status);
 }
 
@@ -191,7 +190,7 @@ void CanOpenStreamCallback(
 {
     uint32_t canMessageId = messageID & 0xFFFFFFC0;
 
-    CanManager* canManager = (CanManager*) param;
+    CanManager* canManager = reinterpret_cast<CanManager*>(param);
     *sessionHandle = canManager->HandleOpenStream(canMessageId, messageIDMask, maxMessages, *status);
 }
 
@@ -199,7 +198,7 @@ void CanCloseStreamSessionCallback(
         const char* name, void* param,
         uint32_t sessionHandle)
 {
-    CanManager* canManager = (CanManager*) param;
+    CanManager* canManager = reinterpret_cast<CanManager*>(param);
     canManager->HandleCloseStream(sessionHandle);
 }
 
@@ -210,7 +209,7 @@ void CanReadStreamSessionCallback(
         uint32_t messagesToRead, uint32_t* messagesRead,
         int32_t* status)
 {
-    CanManager* canManager = (CanManager*) param;
+    CanManager* canManager = reinterpret_cast<CanManager*>(param);
     *messagesRead = canManager->HandleReadStream(sessionHandle, messages, messagesToRead);
 }
 
@@ -220,5 +219,5 @@ void CanGetCANStatusCallback(
         uint32_t* txFullCount, uint32_t* receiveErrorCount,
         uint32_t* transmitErrorCount, int32_t* status)
 {
-	SNOBOT_LOG(SnobotLogging::WARN, "CanGetCANStatusCallback is not supported");
+    SNOBOT_LOG(SnobotLogging::WARN, "CanGetCANStatusCallback is not supported");
 }

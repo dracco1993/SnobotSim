@@ -9,15 +9,15 @@ import javax.swing.JPanel;
 
 /**
  * This panel shows the Enable and Autonomous buttons
- * 
+ *
  * @author PJ
  *
  */
 public class EnablePanel extends JPanel
 {
-    private JCheckBox mEnableButton = new JCheckBox("Enabled");
-    private JCheckBox mAutonButton = new JCheckBox("Autonomous");
-    private JLabel mTimeLabel = new JLabel("Time: 000.00");
+    private final JCheckBox mEnableButton = new JCheckBox("Enabled");
+    private final JCheckBox mAutonButton = new JCheckBox("Autonomous");
+    private final JLabel mTimeLabel = new JLabel("Time: 000.00");
 
     public EnablePanel()
     {
@@ -49,8 +49,8 @@ public class EnablePanel extends JPanel
         mTimeLabel.setText("Time: " + df.format(aTime));
     }
 
-    public void setRobotEnabled(boolean state)
+    public void setRobotEnabled(boolean aState)
     {
-        mEnableButton.setSelected(state);
+        mEnableButton.setSelected(aState);
     }
 }

@@ -7,7 +7,6 @@ import com.snobot.simulator.simulator_components.gyro.IGyroWrapper;
 
 public class CtrePigeonImuSim
 {
-
     private final PigeonAccelWrapper mXAccel;
     private final PigeonAccelWrapper mYAccel;
     private final PigeonAccelWrapper mZAccel;
@@ -65,7 +64,7 @@ public class CtrePigeonImuSim
         return mZAccel;
     }
 
-    private class PigeonGyroWrapper extends ASensorWrapper implements IGyroWrapper
+    private static class PigeonGyroWrapper extends ASensorWrapper implements IGyroWrapper
     {
         private double mAngle;
 
@@ -85,9 +84,9 @@ public class CtrePigeonImuSim
         {
             mAngle = aAngle;
         }
-    };
+    }
 
-    private class PigeonAccelWrapper extends ASensorWrapper implements IAccelerometerWrapper
+    private static class PigeonAccelWrapper extends ASensorWrapper implements IAccelerometerWrapper
     {
         private double mAccel;
 
@@ -107,6 +106,6 @@ public class CtrePigeonImuSim
         {
             mAccel = aAccel;
         }
-    };
+    }
 
 }

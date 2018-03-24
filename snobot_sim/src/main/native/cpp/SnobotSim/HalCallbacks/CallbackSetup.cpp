@@ -12,7 +12,6 @@
 #include "SnobotSim/HalCallbacks/SpiCallbacks.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
 
-
 void SnobotSim::InitializeSnobotCallbacks()
 {
     InitializeAnalogGyroCallbacks();
@@ -37,7 +36,6 @@ void SnobotSim::ResetSnobotCallbacks()
     ResetRelayCallbacks();
     ResetSolenoidCallbacks();
     ResetSpiCallbacks();
-
 
     // Re-initialize after you are done
     InitializeSnobotCallbacks();

@@ -16,6 +16,8 @@ public interface SimulatorDataAccessor
         DEBUG, INFO, WARNING, ERROR
     }
 
+    public static final double sDEFAULT_LOOP_PERIOD = .02;
+
     void setLogLevel(SnobotLogLevel logLevel);
 
     String getNativeBuildVersion();
@@ -55,7 +57,17 @@ public interface SimulatorDataAccessor
      * Updates the simulator components and speed controllers, moving them
      * forward aUpdateTime seconds in time. This function does not delay any
      * time
-     * 
+     */
+    default void updateSimulatorComponents()
+    {
+        updateSimulatorComponents(sDEFAULT_LOOP_PERIOD);
+    }
+
+    /**
+     * Updates the simulator components and speed controllers, moving them
+     * forward aUpdateTime seconds in time. This function does not delay any
+     * time
+     *
      * @param aUpdatePeriod
      *            The time to move the components forward
      */
@@ -67,13 +79,13 @@ public interface SimulatorDataAccessor
      */
     default void waitForNextUpdateLoop()
     {
-        waitForNextUpdateLoop(.002);
+        waitForNextUpdateLoop(sDEFAULT_LOOP_PERIOD);
     }
 
     /**
      * Simulates waiting for a DS packet to come in. Actually waits the amount
      * of time
-     * 
+     *
      * @param aUpdatePeriod
      *            The time, in seconds, to pause before notifying the DS it has
      *            received data
@@ -100,5 +112,9 @@ public interface SimulatorDataAccessor
     }
 
     void setMatchInfo(String eventName, MatchType matchType, int matchNumber, int replayNumber, String gameSpecificMessage);
+
+    void removeSimulatorComponent(Object comp);
+
+    double getTimeSinceEnabled();
 
 }

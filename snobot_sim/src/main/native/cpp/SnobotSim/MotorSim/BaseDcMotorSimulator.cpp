@@ -5,25 +5,23 @@
  *      Author: preiniger
  */
 
-
 #include "SnobotSim/MotorSim/BaseDcMotorSimulator.h"
-
 
 BaseDcMotorSimulator::BaseDcMotorSimulator(
         const std::string& aSimulatorType,
         const DcMotorModel& aMotorModel,
         double aConversionFactor) :
-        mSimulatorType(aSimulatorType), mMotorModel(aMotorModel), mConversionFactor(aConversionFactor), mVoltagePercentage(0)
+        mSimulatorType(aSimulatorType),
+        mMotorModel(aMotorModel),
+        mConversionFactor(aConversionFactor),
+        mVoltagePercentage(0)
 
 {
-
 }
 
 BaseDcMotorSimulator::~BaseDcMotorSimulator()
 {
-
 }
-
 
 const std::string& BaseDcMotorSimulator::GetSimulatorType()
 {
@@ -69,7 +67,6 @@ double BaseDcMotorSimulator::GetCurrent()
 {
     return mMotorModel.GetCurrent();
 }
-
 
 const DcMotorModel& BaseDcMotorSimulator::GetMotorModel()
 {

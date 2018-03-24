@@ -34,7 +34,7 @@ public class TestJoystickFactory extends BaseSimulatorTest
             Assert.assertTrue(configFile.getParentFile().mkdirs());
         }
 
-        JoystickFactory factory = JoystickFactory.get();
+        JoystickFactory factory = JoystickFactory.getInstance();
 
         Map<String, ControllerConfiguration> config = factory.getControllerConfiguration();
         Assert.assertEquals(0, config.size());
@@ -47,7 +47,7 @@ public class TestJoystickFactory extends BaseSimulatorTest
         config.put("X", new ControllerConfiguration(new MockController(), XboxJoystick.class));
         config.put("Y", new ControllerConfiguration(new MockController(), Ps4Joystick.class));
         config.put("Z", new ControllerConfiguration(new MockController(), KeyboardJoystick.class));
-        
+
         factory.setJoysticks(0, "X");
         factory.setJoysticks(3, "Y");
         factory.setJoysticks(5, "Z");
@@ -59,10 +59,10 @@ public class TestJoystickFactory extends BaseSimulatorTest
         Assert.assertTrue(factory.get(4) instanceof NullJoystick);
         Assert.assertTrue(factory.get(5) instanceof KeyboardJoystick);
 
-        InputStream input_stream = new FileInputStream(JoystickFactory.sJOYSTICK_CONFIG_FILE);
+        InputStream inputStream = new FileInputStream(JoystickFactory.sJOYSTICK_CONFIG_FILE);
         Properties properties = new Properties();
-        properties.load(input_stream);
-        input_stream.close();
+        properties.load(inputStream);
+        inputStream.close();
 
         Assert.assertEquals("X---com.snobot.simulator.joysticks.joystick_specializations.XboxJoystick", properties.getProperty("Joystick_0"));
         Assert.assertEquals("Null Joystick---null", properties.getProperty("Joystick_1"));
