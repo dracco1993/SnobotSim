@@ -5,14 +5,25 @@
 
 #include "SnobotSim/GetSensorActuatorHelper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/SimulatorComponents/Gyro/IGyroWrapper.h"
+#include "SnobotSim/ModuleWrapper/Interfaces/IGyroWrapper.h"
+#include "SnobotSim/ModuleWrapper/Factories/GyroFactory.h"
 #include "com_snobot_simulator_jni_module_wrapper_GyroWrapperJni.h"
-#include "wpi/jni_util.h"
+#include "support/jni_util.h"
 
 using namespace wpi::java;
 
 extern "C"
 {
+/*
+ * Class:     com_snobot_simulator_jni_module_wrapper_GyroWrapperJni
+ * Method:    isInitialized
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapperJni_isInitialized
+  (JNIEnv *, jclass, jint aPortHandle)
+{
+	return SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->IsInitialized();
+}
 
 /*
  * Class:     com_snobot_simulator_jni_module_wrapper_GyroWrapperJni
@@ -62,6 +73,30 @@ JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWra
   (JNIEnv *, jclass, jint aPortHandle)
 {
     return SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->WantsHidden();
+}
+
+/*
+ * Class:     com_snobot_simulator_jni_module_wrapper_GyroWrapperJni
+ * Method:    createSimulator
+ * Signature: (ILjava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapperJni_createSimulator
+  (JNIEnv * env, jclass, jint aHandle, jstring aType)
+{
+	static GyroFactory factory;
+
+	return factory.Create(aHandle, env->GetStringUTFChars(aType, NULL));
+}
+
+/*
+ * Class:     com_snobot_simulator_jni_module_wrapper_GyroWrapperJni
+ * Method:    removeSimluator
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapperJni_removeSimluator
+  (JNIEnv *, jclass, jint)
+{
+
 }
 
 /*

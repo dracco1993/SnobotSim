@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.snobot.simulator.SensorActuatorRegistry;
+import com.snobot.simulator.module_wrapper.interfaces.IEncoderWrapper;
+import com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper;
 import com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig;
 import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 import com.snobot.test.utilities.BaseSimulatorJavaTest;
@@ -34,6 +36,16 @@ public class TestEncoderJni extends BaseSimulatorJavaTest
 
         DataAccessorFactory.getInstance().getEncoderAccessor().setName(1, "NewNameFor1");
         Assertions.assertEquals("NewNameFor1", DataAccessorFactory.getInstance().getEncoderAccessor().getName(1));
+    }
+
+    @Test
+    public void testCreateEncoderWithSetup()
+    {
+        DataAccessorFactory.getInstance().getEncoderAccessor().createSimulator(0, WpiEncoderWrapper.class.getName());
+        Assertions.assertFalse(DataAccessorFactory.getInstance().getEncoderAccessor().isInitialized(0));
+
+        new Encoder(1, 2);
+        Assertions.assertTrue(DataAccessorFactory.getInstance().getEncoderAccessor().isInitialized(0));
     }
 
     public void testReusePort()
@@ -74,16 +86,14 @@ public class TestEncoderJni extends BaseSimulatorJavaTest
         Assertions.assertEquals(12.0, encoder.getDistance(), DOUBLE_EPSILON);
         Assertions.assertEquals(12.0, encoder.getRate(), DOUBLE_EPSILON);
         Assertions.assertEquals(12.0, DataAccessorFactory.getInstance().getEncoderAccessor().getDistance(0), DOUBLE_EPSILON);
-        Assertions.assertEquals(12.0 / 4, DataAccessorFactory.getInstance().getEncoderAccessor().getRaw(0), DOUBLE_EPSILON);
 
         encoder.reset();
         Assertions.assertEquals(0.0, encoder.getDistance(), DOUBLE_EPSILON);
         Assertions.assertEquals(0.0, encoder.getRate(), DOUBLE_EPSILON);
         Assertions.assertEquals(0.0, DataAccessorFactory.getInstance().getEncoderAccessor().getDistance(0), DOUBLE_EPSILON);
-        Assertions.assertEquals(0.0, DataAccessorFactory.getInstance().getEncoderAccessor().getRaw(0), DOUBLE_EPSILON);
     }
 
-    @Disabled("Need to update WPILIB")
+    @Disabled
     @Test
     public void testSpeedControllerFeedbackWithDistancePerTick()
     {
@@ -110,13 +120,11 @@ public class TestEncoderJni extends BaseSimulatorJavaTest
         Assertions.assertEquals(12.0, encoder.getDistance(), DOUBLE_EPSILON);
         Assertions.assertEquals(12.0, encoder.getRate(), DOUBLE_EPSILON);
         Assertions.assertEquals(12.0, DataAccessorFactory.getInstance().getEncoderAccessor().getDistance(0), DOUBLE_EPSILON);
-        Assertions.assertEquals(12.0 / 4, DataAccessorFactory.getInstance().getEncoderAccessor().getRaw(0), DOUBLE_EPSILON);
 
         encoder.reset();
         Assertions.assertEquals(0.0, encoder.getDistance(), DOUBLE_EPSILON);
         Assertions.assertEquals(0.0, encoder.getRate(), DOUBLE_EPSILON);
         Assertions.assertEquals(0.0, DataAccessorFactory.getInstance().getEncoderAccessor().getDistance(0), DOUBLE_EPSILON);
-        Assertions.assertEquals(0.0, DataAccessorFactory.getInstance().getEncoderAccessor().getRaw(0), DOUBLE_EPSILON);
 
         simulateForTime(1, () ->
         {
@@ -128,7 +136,6 @@ public class TestEncoderJni extends BaseSimulatorJavaTest
         encoder.reset();
         Assertions.assertEquals(0.0, encoder.getDistance(), DOUBLE_EPSILON);
         Assertions.assertEquals(0.0, DataAccessorFactory.getInstance().getEncoderAccessor().getDistance(0), DOUBLE_EPSILON);
-        Assertions.assertEquals(0.0, DataAccessorFactory.getInstance().getEncoderAccessor().getRaw(0), DOUBLE_EPSILON);
 
     }
 
@@ -136,13 +143,12 @@ public class TestEncoderJni extends BaseSimulatorJavaTest
     public void testSimulatorFeedbackNoUpdate()
     {
         Encoder encoder = new Encoder(1, 2);
-        EncoderWrapper wrapper = SensorActuatorRegistry.get().getEncoders().get(0);
+        IEncoderWrapper wrapper = SensorActuatorRegistry.get().getEncoders().get(0);
         wrapper.setPosition(5);
         wrapper.setPosition(5);
 
         Assertions.assertEquals(5.0, encoder.getDistance(), DOUBLE_EPSILON);
         Assertions.assertEquals(5.0, DataAccessorFactory.getInstance().getEncoderAccessor().getDistance(0), DOUBLE_EPSILON);
-        Assertions.assertEquals((int) 5.0 / 4, DataAccessorFactory.getInstance().getEncoderAccessor().getRaw(0), DOUBLE_EPSILON);
     }
 
     @Test

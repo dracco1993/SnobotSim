@@ -3,6 +3,7 @@ package com.snobot.simulator.module_wrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper;
 import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 import com.snobot.test.utilities.BaseSimulatorJavaTest;
 
@@ -27,8 +28,23 @@ public class TestSolenoidJni extends BaseSimulatorJavaTest
         Assertions.assertEquals("Solenoid 3", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(3));
         Assertions.assertFalse(DataAccessorFactory.getInstance().getSolenoidAccessor().getWantsHidden(3));
 
+        new Solenoid(1, 6);
+        Assertions.assertEquals(3, DataAccessorFactory.getInstance().getSolenoidAccessor().getPortList().size());
+        Assertions.assertEquals("Solenoid 14", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(14));
+        Assertions.assertFalse(DataAccessorFactory.getInstance().getSolenoidAccessor().getWantsHidden(14));
+
         DataAccessorFactory.getInstance().getSolenoidAccessor().setName(0, "NewNameFor0");
         Assertions.assertEquals("NewNameFor0", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(0));
+    }
+
+    @Test
+    public void testCreateSolenoidWithSetup()
+    {
+        DataAccessorFactory.getInstance().getSolenoidAccessor().createSimulator(3, WpiSolenoidWrapper.class.getName());
+        Assertions.assertFalse(DataAccessorFactory.getInstance().getSolenoidAccessor().isInitialized(3));
+
+        new Solenoid(3);
+        Assertions.assertTrue(DataAccessorFactory.getInstance().getSolenoidAccessor().isInitialized(3));
     }
 
     public void testReusePort()

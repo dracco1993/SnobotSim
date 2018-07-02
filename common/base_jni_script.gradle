@@ -7,7 +7,7 @@ apply plugin: 'edu.wpi.first.NativeUtils'
 apply plugin: 'edu.wpi.first.GradleJni'
 
 apply from: "${rootDir}/common/base_java_script.gradle"
-apply from: '../config.gradle'
+apply from: "${rootDir}/common/config.gradle"
 
 
 dependencies {
@@ -15,14 +15,19 @@ dependencies {
 }
 
 task "packageNative${libraryName}FilesInJar"(type: Jar) {
+    group = "Package Natives"
+    description ="Description"
+
+
     destinationDir = project.buildDir
-    classifier = "native-" + org.gradle.internal.os.OperatingSystem.current().getFamilyName();
+    classifier = org.gradle.internal.os.OperatingSystem.current().getFamilyName() + "-" + getCurrentArch();
 
     project.model {
         binaries {
             withType(SharedLibraryBinarySpec) { binary ->
                 if (binary.component.name == project.libraryName)
                 {
+                    dependsOn binary.buildTask
                     from(binary.sharedLibraryFile) {
                         into project.getNativeVersion(binary)
                     }
@@ -32,6 +37,7 @@ task "packageNative${libraryName}FilesInJar"(type: Jar) {
                     project.extra_libraries.each {
                         if (binary.component.name == it[1])
                         {
+                            dependsOn binary.buildTask
                             from(binary.sharedLibraryFile) {
                                 into project.getNativeVersion(binary)
                             }
@@ -55,10 +61,10 @@ model {
             }
             enableCheckTask true
             javaCompileTasks << compileJava
-            jniCrossCompileOptions << JniCrossCompileOptions('linux', 'athena', ["${rootDir}/common/arm-linux-jni".toString(), "${rootDir}/common/arm-linux-jni/linux".toString()])
+            jniCrossCompileOptions << JniCrossCompileOptions('athena')
             sources {
                 cpp {
-                    source {                      
+                    source {
                         srcDirs = project.librarySrcDirs
                         includes = ["**/*.cpp"]
                     }

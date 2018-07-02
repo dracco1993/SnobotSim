@@ -9,11 +9,11 @@
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/RobotStateSingleton.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/SimulatorComponents/I2C/I2CWrapperFactory.h"
-#include "SnobotSim/SimulatorComponents/Spi/SpiWrapperFactory.h"
+#include "SnobotSim/ModuleWrapper/Factories/I2CWrapperFactory.h"
+#include "SnobotSim/ModuleWrapper/Factories/SpiWrapperFactory.h"
 #include "SnobotSim/SnobotSimHalVersion.h"
 #include "com_snobot_simulator_jni_SnobotSimulatorJni.h"
-#include "wpi/jni_util.h"
+#include "support/jni_util.h"
 
 using namespace wpi::java;
 
