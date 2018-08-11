@@ -10,7 +10,6 @@ import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 import com.snobot.simulator.wrapper_accessors.SimulatorDataAccessor.SnobotLogLevel;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpiutil.RuntimeDetector;
 
 public class BaseSimulatorTest
@@ -53,7 +52,6 @@ public class BaseSimulatorTest
         }
 
         DataAccessorFactory.getInstance().getSimulatorDataAccessor().reset();
-        RobotBase.initializeHardwareConfiguration();
     }
 
     @AfterEach

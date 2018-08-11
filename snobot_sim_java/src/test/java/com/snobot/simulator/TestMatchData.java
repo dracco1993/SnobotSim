@@ -40,6 +40,7 @@ public class TestMatchData extends BaseSimulatorJavaTest
         {
             // Ignore
         }
+        DataAccessorFactory.getInstance().getDriverStationAccessor().waitForNextUpdateLoop();
 
         Assertions.assertEquals("Event Name", DriverStation.getInstance().getEventName());
         Assertions.assertEquals(MatchType.Qualification, DriverStation.getInstance().getMatchType());

@@ -12,7 +12,6 @@ import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
 import com.snobot.simulator.wrapper_accessors.jni.JniDataAccessor;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 
 public class BaseSimulatorJniTest
 {
@@ -67,7 +66,6 @@ public class BaseSimulatorJniTest
         }
 
         SnobotSimulatorJni.reset();
-        RobotBase.initializeHardwareConfiguration();
     }
 
     protected void simulateForTime(double aSeconds, Runnable aTask)
