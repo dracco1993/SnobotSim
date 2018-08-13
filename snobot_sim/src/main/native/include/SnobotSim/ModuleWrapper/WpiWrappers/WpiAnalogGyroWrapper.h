@@ -13,8 +13,9 @@
 #include "SnobotSim/ExportHelper.h"
 #include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IGyroWrapper.h"
+#include "lowfisim/wpisimulators/WpiAnalogGyroSim.h"
 
-class WpiAnalogGyroWrapper : public AModuleWrapper, public IGyroWrapper
+class WpiAnalogGyroWrapper : public AModuleWrapper, public IGyroWrapper, public frc::sim::lowfi::WpiAnalogGyroSim
 {
 public:
     using AModuleWrapper::GetName;
@@ -25,9 +26,6 @@ public:
     void SetAngle(double aAngle) override;
 
     double GetAngle() override;
-
-protected:
-    const int mHandle;
 };
 
 #endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIANALOGGYROWRAPPER_H_

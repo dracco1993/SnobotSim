@@ -11,7 +11,7 @@
 
 WpiAnalogGyroWrapper::WpiAnalogGyroWrapper(int aPort) :
         AModuleWrapper("Analog Gyro"),
-        mHandle(aPort)
+		frc::sim::lowfi::WpiAnalogGyroSim(aPort)
 {
 }
 
@@ -21,10 +21,10 @@ WpiAnalogGyroWrapper::~WpiAnalogGyroWrapper()
 
 void WpiAnalogGyroWrapper::SetAngle(double aAngle)
 {
-    HALSIM_SetAnalogGyroAngle(mHandle, aAngle);
+	frc::sim::lowfi::WpiAnalogGyroSim::SetAngle(aAngle);
 }
 
 double WpiAnalogGyroWrapper::GetAngle()
 {
-    return HALSIM_GetAnalogGyroAngle(mHandle);
+    return frc::sim::lowfi::WpiAnalogGyroSim::GetAngle();
 }

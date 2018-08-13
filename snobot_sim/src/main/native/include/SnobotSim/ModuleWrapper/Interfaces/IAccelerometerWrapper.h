@@ -10,16 +10,10 @@
 
 #include "SnobotSim/ModuleWrapper/Interfaces/ISensorWrapper.h"
 
-class IAccelerometerWrapper : public virtual ISensorWrapper
+#include "lowfisim/AccelerometerSim.h"
+
+class IAccelerometerWrapper : public virtual ISensorWrapper, public frc::sim::lowfi::AccelerometerSim
 {
-public:
-    virtual ~IAccelerometerWrapper()
-    {
-    }
-
-    virtual void SetAcceleration(double aAcceleration) = 0;
-
-    virtual double GetAcceleration() = 0;
 };
 
 #endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_INTERFACES_IACCELEROMETERWRAPPER_H_

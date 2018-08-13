@@ -9,53 +9,21 @@
 
 #include "SnobotSim/SensorActuatorRegistry.h"
 
+#include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAccelerometerWrapper.h"
+
 BaseAdxAccelWrapper::BaseAdxAccelWrapper(int aBasePort, const std::shared_ptr<hal::ThreeAxisAccelerometerData>& aAccel) :
-        mXWrapper(new AccelerometerWrapper(AccelerometerWrapper::AXIS_X, aAccel)),
-        mYWrapper(new AccelerometerWrapper(AccelerometerWrapper::AXIS_Y, aAccel)),
-        mZWrapper(new AccelerometerWrapper(AccelerometerWrapper::AXIS_Z, aAccel))
+	frc::sim::lowfi::ADXLThreeAxisAccelerometerSim(*aAccel),
+	mCachedAccel(aAccel)
 {
-    SensorActuatorRegistry::Get().Register(aBasePort + 0, mXWrapper);
-    SensorActuatorRegistry::Get().Register(aBasePort + 1, mYWrapper);
-    SensorActuatorRegistry::Get().Register(aBasePort + 2, mZWrapper);
+	std::shared_ptr<WpiAccelerometerWrapper>  xWrapper(new WpiAccelerometerWrapper("DoesntMatter", GetXWrapper()));
+	std::shared_ptr<WpiAccelerometerWrapper>  yWrapper(new WpiAccelerometerWrapper("DoesntMatter", GetYWrapper()));
+	std::shared_ptr<WpiAccelerometerWrapper>  zWrapper(new WpiAccelerometerWrapper("DoesntMatter", GetZWrapper()));
+
+    SensorActuatorRegistry::Get().Register(aBasePort + 0, xWrapper);
+    SensorActuatorRegistry::Get().Register(aBasePort + 1, yWrapper);
+    SensorActuatorRegistry::Get().Register(aBasePort + 2, zWrapper);
 }
 
 BaseAdxAccelWrapper::~BaseAdxAccelWrapper()
 {
-}
-
-BaseAdxAccelWrapper::AccelerometerWrapper::AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<hal::ThreeAxisAccelerometerData>& aAccel) :
-        AModuleWrapper("Hello"),
-        mAxisType(aAxisType),
-        mAccel(aAccel)
-{
-}
-
-void BaseAdxAccelWrapper::AccelerometerWrapper::SetAcceleration(double aAcceleration)
-{
-    switch (mAxisType)
-    {
-    case AXIS_X:
-        mAccel->SetX(aAcceleration);
-        break;
-    case AXIS_Y:
-        mAccel->SetY(aAcceleration);
-        break;
-    case AXIS_Z:
-        mAccel->SetZ(aAcceleration);
-        break;
-    }
-}
-
-double BaseAdxAccelWrapper::AccelerometerWrapper::GetAcceleration()
-{
-    switch (mAxisType)
-    {
-    case AXIS_X:
-        return mAccel->GetX();
-    case AXIS_Y:
-        return mAccel->GetY();
-    case AXIS_Z:
-        return mAccel->GetZ();
-    }
-    return 0;
 }

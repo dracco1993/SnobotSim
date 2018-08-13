@@ -110,5 +110,13 @@ model {
             version = allwpilibVersion()
             sharedConfigs = [ snobotSimJni: [] ]
         }
+        wpisim(DependencyConfig) {
+            groupId = 'edu.wpi.first.halsim'
+            artifactId = 'lowfi_sim'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = allwpilibVersion()
+            sharedConfigs = [ snobotSimJni: [] ]
+        }
     }
 }

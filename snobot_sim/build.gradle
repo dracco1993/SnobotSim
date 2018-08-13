@@ -51,6 +51,14 @@ model {
             version = allwpilibVersion()
             sharedConfigs = [ snobotSimCpp: [], standaloneSnobotSimBase: [] ]
         }
+        wpisim(DependencyConfig) {
+            groupId = 'edu.wpi.first.halsim'
+            artifactId = 'lowfi_sim'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = allwpilibVersion()
+            sharedConfigs = [ snobotSimCpp: [], standaloneSnobotSimBase: [] ]
+        }
         adxfamily(DependencyConfig) {
             groupId = 'edu.wpi.first.halsim'
             artifactId = 'halsim_adx_gyro_accelerometer'
