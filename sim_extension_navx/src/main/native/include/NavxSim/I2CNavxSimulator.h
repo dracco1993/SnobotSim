@@ -16,6 +16,8 @@ public:
     explicit I2CNavxSimulator(int port);
     virtual ~I2CNavxSimulator();
 
+    bool GetInitialized() const override;
+
     virtual void HandleRead(uint8_t* buffer, uint32_t count);
     virtual void HandleWrite(const uint8_t* buffer, uint32_t count);
 

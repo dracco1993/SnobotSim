@@ -12,7 +12,7 @@
 TankDriveSimulator::TankDriveSimulator(
         const std::shared_ptr<IEncoderWrapper>& aLeftEncoder,
         const std::shared_ptr<IEncoderWrapper>& aRightEncoder,
-        const std::shared_ptr<IGyroWrapper>& aGyroWrapper,
+        const std::shared_ptr<frc::sim::lowfi::GyroSim>& aGyroWrapper,
         double aTurnKp) :
 
         mLeftEncoder(aLeftEncoder),

@@ -37,6 +37,11 @@ SpiNavxSimulator::~SpiNavxSimulator()
     HALSIM_CancelSPIWriteCallback(mPort, mWriteCallbackId);
 }
 
+bool SpiNavxSimulator::GetInitialized() const
+{
+    return HALSIM_GetSPIInitialized(mPort);
+}
+
 void SpiNavxSimulator::HandleWrite(const uint8_t* buffer, uint32_t count)
 {
     mLastWriteAddress = buffer[0];

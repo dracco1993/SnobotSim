@@ -16,6 +16,8 @@ public:
     explicit SpiNavxSimulator(int aPort);
     virtual ~SpiNavxSimulator();
 
+    bool GetInitialized() const override;
+
     void HandleRead(uint8_t* buffer, uint32_t count);
     void HandleWrite(const uint8_t* buffer, uint32_t count);
 

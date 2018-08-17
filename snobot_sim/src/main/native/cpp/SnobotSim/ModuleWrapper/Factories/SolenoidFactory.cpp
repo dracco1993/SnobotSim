@@ -9,6 +9,7 @@
 
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiSolenoidWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 SolenoidFactory::SolenoidFactory()
@@ -31,6 +32,8 @@ bool SolenoidFactory::Create(int aHandle, const std::string& aType)
 
             SensorActuatorRegistry::Get().Register(aHandle,
                     std::shared_ptr<ISolenoidWrapper>(new WpiSolenoidWrapper(aHandle)));
+
+            SensorActuatorRegistry::Get().GetISolenoidWrapper(aHandle)->SetDisplayName("Solenoid " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

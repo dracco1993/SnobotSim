@@ -29,7 +29,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SpeedControllerWrapperJni_isInitialized
   (JNIEnv *, jclass, jint aPortHandle)
 {
-	return SensorActuatorRegistry::Get().GetISpeedControllerWrapper(aPortHandle)->IsInitialized();
+	return SensorActuatorRegistry::Get().GetISpeedControllerWrapper(aPortHandle)->IsWrapperInitialized();
 }
 /*
  * Class:     com_snobot_simulator_jni_module_wrapper_SpeedControllerWrapperJni
@@ -42,7 +42,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SpeedContro
     std::shared_ptr<ISpeedControllerWrapper> wrapper = GetSensorActuatorHelper::GetISpeedControllerWrapper(aPortHandle);
     if(wrapper)
     {
-        wrapper->SetName(env->GetStringUTFChars(aName, NULL));
+        wrapper->SetDisplayName(env->GetStringUTFChars(aName, NULL));
     }
 }
 
@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SpeedContro
 JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SpeedControllerWrapperJni_getName(JNIEnv * env, jclass, jint portHandle)
 {
 
-    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetISpeedControllerWrapper(portHandle)->GetName());
+    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetISpeedControllerWrapper(portHandle)->GetDisplayName());
 
     return output;
 }
@@ -66,7 +66,8 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SpeedCon
  */
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SpeedControllerWrapperJni_getWantsHidden(JNIEnv *, jclass, jint portHandle)
 {
-    return SensorActuatorRegistry::Get().GetISpeedControllerWrapper(portHandle)->WantsHidden();
+    SNOBOT_LOG(SnobotLogging::WARN, "Deprecated");
+    return false;
 }
 
 /*

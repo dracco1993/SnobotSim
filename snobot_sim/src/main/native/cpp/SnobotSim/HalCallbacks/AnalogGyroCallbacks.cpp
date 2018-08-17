@@ -7,11 +7,10 @@
 
 #include "SnobotSim/HalCallbacks/AnalogGyroCallbacks.h"
 
-#include "mockdata/AnalogGyroData.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/Factories/FactoryContainer.h"
-#include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAnalogGyroWrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
+#include "mockdata/AnalogGyroData.h"
 
 void AnalogGyroCallback(const char* name, void* param, const struct HAL_Value* value)
 {
@@ -26,9 +25,6 @@ void AnalogGyroCallback(const char* name, void* param, const struct HAL_Value* v
         }
 
         std::shared_ptr<IAnalogInWrapper> analogWrapper = SensorActuatorRegistry::Get().GetIAnalogInWrapper(port);
-        analogWrapper->SetWantsHidden(true);
-
-        SensorActuatorRegistry::Get().GetIGyroWrapper(port)->SetInitialized(true);
     }
     else if (nameStr == "Angle")
     {

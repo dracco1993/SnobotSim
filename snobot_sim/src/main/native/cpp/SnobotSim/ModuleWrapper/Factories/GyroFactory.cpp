@@ -8,8 +8,9 @@
 #include "SnobotSim/ModuleWrapper/Factories/GyroFactory.h"
 
 #include "SnobotSim/Logging/SnobotLogger.h"
-#include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAnalogGyroWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
+#include "lowfisim/wpisimulators/WpiAnalogGyroSim.h"
 
 GyroFactory::GyroFactory()
 {
@@ -29,8 +30,10 @@ bool GyroFactory::Create(int aHandle, const std::string& aType)
         {
             SNOBOT_LOG(SnobotLogging::WARN, "Not set up before loading robot");
 
-            std::shared_ptr<IGyroWrapper> gyroWrapper(new WpiAnalogGyroWrapper(aHandle));
+            std::shared_ptr<IGyroWrapper> gyroWrapper(new frc::sim::lowfi::WpiAnalogGyroSim(aHandle));
             SensorActuatorRegistry::Get().Register(aHandle, gyroWrapper);
+
+            SensorActuatorRegistry::Get().GetIGyroWrapper(aHandle)->SetDisplayName("Analog Gyro " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

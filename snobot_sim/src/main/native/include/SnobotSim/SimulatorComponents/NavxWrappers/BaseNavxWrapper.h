@@ -11,9 +11,9 @@
 #include <memory>
 
 #include "NavxSim/NavxSimulator.h"
-#include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IAccelerometerWrapper.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IGyroWrapper.h"
+#include "lowfisim/AccelerometerSim.h"
+#include "lowfisim/SimpleGyroSim.h"
+#include "lowfisim/SimulatorComponentBase.h"
 
 class BaseNavxWrapper
 {
@@ -21,48 +21,37 @@ public:
     BaseNavxWrapper(int aBasePort, const std::shared_ptr<NavxSimulator>& aNavx);
     virtual ~BaseNavxWrapper();
 
-    class AccelerometerWrapper : public AModuleWrapper, public IAccelerometerWrapper
+    class GyroWrapper : public frc::sim::lowfi::SimulatorComponentBase, public frc::sim::lowfi::GyroSim
     {
     public:
-        enum AxisType
+        GyroWrapper(
+                const std::shared_ptr<NavxSimulator>& aNavx,
+                const std::function<void(double)>& setterFunction,
+                const std::function<double(void)>& getterFunction);
+
+        bool IsWrapperInitialized() const override;
+
+        double GetAngle() override
         {
-            AXIS_X,
-            AXIS_Y,
-            AXIS_Z
-        };
+            return m_getAngleFunction();
+        }
 
-        AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aNavx);
-
-        void SetAcceleration(double aAcceleration) override;
-
-        double GetAcceleration() override;
-
-        AxisType mAxisType;
-        std::shared_ptr<NavxSimulator> mNavx;
-    };
-    class GyroWrapper : public AModuleWrapper, public IGyroWrapper
-    {
-    public:
-        enum AxisType
+        void SetAngle(double angle) override
         {
-            AXIS_YAW,
-            AXIS_PITCH,
-            AXIS_ROLL
-        };
+            m_setAngleFunction(angle);
+        }
 
-        GyroWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aAccel);
-
-        void SetAngle(double aAngle) override;
-
-        double GetAngle() override;
-
-        AxisType mAxisType;
+    protected:
         std::shared_ptr<NavxSimulator> mNavx;
+        std::function<void(double)> m_setAngleFunction;
+        std::function<double(void)> m_getAngleFunction;
     };
 
-    std::shared_ptr<AccelerometerWrapper> mXWrapper;
-    std::shared_ptr<AccelerometerWrapper> mYWrapper;
-    std::shared_ptr<AccelerometerWrapper> mZWrapper;
+    std::shared_ptr<NavxSimulator> mNavx;
+
+    std::shared_ptr<frc::sim::lowfi::AccelerometerSim> mXWrapper;
+    std::shared_ptr<frc::sim::lowfi::AccelerometerSim> mYWrapper;
+    std::shared_ptr<frc::sim::lowfi::AccelerometerSim> mZWrapper;
 
     std::shared_ptr<GyroWrapper> mYawWrapper;
     std::shared_ptr<GyroWrapper> mPitchWrapper;

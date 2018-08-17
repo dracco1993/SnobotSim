@@ -11,20 +11,22 @@
 #include <memory>
 #include <string>
 
-#include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IEncoderWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/ISpeedControllerWrapper.h"
 #include "SnobotSim/SimulatorComponents/IFeedbackSensor.h"
+#include "lowfisim/SimulatorComponentBase.h"
 
 class WpiEncoderWrapper : public std::enable_shared_from_this<WpiEncoderWrapper>,
-                          public AModuleWrapper,
+                          public frc::sim::lowfi::SimulatorComponentBase,
                           public IFeedbackSensor,
                           public IEncoderWrapper
 {
 public:
+    explicit WpiEncoderWrapper(int aHandle);
     WpiEncoderWrapper(int aPortA, int aPortB);
-    WpiEncoderWrapper(int aHandle, const std::string& aName);
     virtual ~WpiEncoderWrapper();
+
+    bool IsWrapperInitialized() const override;
 
     void Reset() override;
 

@@ -8,9 +8,9 @@
 #ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_INTERFACES_IRELAYWRAPPER_H_
 #define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_INTERFACES_IRELAYWRAPPER_H_
 
-#include "SnobotSim/ModuleWrapper/Interfaces/ISensorWrapper.h"
+#include "lowfisim/SimulatorComponent.h"
 
-class IRelayWrapper : public virtual ISensorWrapper
+class IRelayWrapper : public virtual frc::sim::lowfi::SimulatorComponent
 {
 public:
     virtual bool GetRelayForwards() = 0;

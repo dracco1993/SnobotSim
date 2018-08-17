@@ -10,11 +10,11 @@
 
 #include <memory>
 
-#include "SnobotSim/ModuleWrapper/Interfaces/ISensorWrapper.h"
 #include "SnobotSim/MotorSim/IMotorSimulator.h"
 #include "SnobotSim/SimulatorComponents/IFeedbackSensor.h"
+#include "lowfisim/SimulatorComponent.h"
 
-class ISpeedControllerWrapper : public virtual ISensorWrapper
+class ISpeedControllerWrapper : public virtual frc::sim::lowfi::SimulatorComponent
 {
 public:
     virtual int GetId() = 0;

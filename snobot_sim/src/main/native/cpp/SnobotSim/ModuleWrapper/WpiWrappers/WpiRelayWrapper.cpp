@@ -8,16 +8,19 @@
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiRelayWrapper.h"
 
 #include "mockdata/RelayData.h"
-#include "SnobotSim/PortUnwrapper.h"
 
 WpiRelayWrapper::WpiRelayWrapper(int aPort) :
-        AModuleWrapper("Relay " + std::to_string(UnwrapPort(aPort))),
         mHandle(aPort)
 {
 }
 
 WpiRelayWrapper::~WpiRelayWrapper()
 {
+}
+
+bool WpiRelayWrapper::IsWrapperInitialized() const
+{
+    return HALSIM_GetRelayInitializedReverse(mHandle);
 }
 
 bool WpiRelayWrapper::GetRelayForwards()

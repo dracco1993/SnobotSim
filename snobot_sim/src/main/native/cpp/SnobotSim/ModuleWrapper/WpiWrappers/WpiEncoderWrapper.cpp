@@ -8,15 +8,13 @@
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiEncoderWrapper.h"
 
 #include "mockdata/EncoderData.h"
-#include "SnobotSim/PortUnwrapper.h"
 
 WpiEncoderWrapper::WpiEncoderWrapper(int aPortA, int aPortB) :
-        WpiEncoderWrapper(aPortA, "Encoder " + std::to_string(UnwrapPort(aPortA)))
+        WpiEncoderWrapper(aPortA)
 {
 }
 
-WpiEncoderWrapper::WpiEncoderWrapper(int aHandle, const std::string& aName) :
-        AModuleWrapper(aName),
+WpiEncoderWrapper::WpiEncoderWrapper(int aHandle) :
         mEncodingFactor(4),
         mDistancePerTick(1),
         mHandle(aHandle)
@@ -25,6 +23,11 @@ WpiEncoderWrapper::WpiEncoderWrapper(int aHandle, const std::string& aName) :
 
 WpiEncoderWrapper::~WpiEncoderWrapper()
 {
+}
+
+bool WpiEncoderWrapper::IsWrapperInitialized() const
+{
+    return HALSIM_GetEncoderInitialized(mHandle);
 }
 
 void WpiEncoderWrapper::Reset()

@@ -8,6 +8,7 @@
 #include "SnobotSim/ModuleWrapper/Factories/AccelerometerFactory.h"
 
 #include "SnobotSim/Logging/SnobotLogger.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 AccelerometerFactory::AccelerometerFactory()

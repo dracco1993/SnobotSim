@@ -10,10 +10,10 @@
 
 #include <memory>
 
-#include "SnobotSim/ModuleWrapper/Interfaces/ISensorWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/ISpeedControllerWrapper.h"
+#include "lowfisim/SimulatorComponent.h"
 
-class IEncoderWrapper : public virtual ISensorWrapper
+class IEncoderWrapper : public virtual frc::sim::lowfi::SimulatorComponent
 {
 public:
     virtual void Reset() = 0;

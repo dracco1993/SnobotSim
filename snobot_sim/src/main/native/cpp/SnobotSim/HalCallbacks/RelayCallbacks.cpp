@@ -2,11 +2,11 @@
 
 #include "SnobotSim/HalCallbacks/RelayCallbacks.h"
 
-#include "mockdata/RelayData.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/Factories/FactoryContainer.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiRelayWrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
+#include "mockdata/RelayData.h"
 
 void RelayCallback(const char* name, void* param, const struct HAL_Value* value)
 {
@@ -19,7 +19,6 @@ void RelayCallback(const char* name, void* param, const struct HAL_Value* value)
         {
             FactoryContainer::Get().GetRelayFactory()->Create(port, "WpiRelayWrapper");
         }
-        SensorActuatorRegistry::Get().GetIRelayWrapper(port)->SetInitialized(true);
     }
     else
     {

@@ -8,10 +8,8 @@
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiSolenoidWrapper.h"
 
 #include "mockdata/PCMData.h"
-#include "SnobotSim/PortUnwrapper.h"
 
 WpiSolenoidWrapper::WpiSolenoidWrapper(int aPort) :
-        AModuleWrapper("Solenoid " + std::to_string(UnwrapPort(aPort))),
         mModule(aPort / 8),
         mChannel(aPort % 8)
 {
@@ -19,6 +17,11 @@ WpiSolenoidWrapper::WpiSolenoidWrapper(int aPort) :
 
 WpiSolenoidWrapper::~WpiSolenoidWrapper()
 {
+}
+
+bool WpiSolenoidWrapper::IsWrapperInitialized() const
+{
+    return HALSIM_GetPCMSolenoidInitialized(mModule, mChannel);
 }
 
 void WpiSolenoidWrapper::SetState(bool aOn)

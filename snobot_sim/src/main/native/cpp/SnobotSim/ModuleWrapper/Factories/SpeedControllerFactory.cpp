@@ -9,6 +9,7 @@
 
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiSpeedControllerWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 SpeedControllerFactory::SpeedControllerFactory()
@@ -31,6 +32,8 @@ bool SpeedControllerFactory::Create(int aHandle, const std::string& aType)
 
             SensorActuatorRegistry::Get().Register(aHandle,
                     std::shared_ptr<ISpeedControllerWrapper>(new WpiSpeedControllerWrapper(aHandle)));
+
+            SensorActuatorRegistry::Get().GetISpeedControllerWrapper(aHandle)->SetDisplayName("Speed Controller " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

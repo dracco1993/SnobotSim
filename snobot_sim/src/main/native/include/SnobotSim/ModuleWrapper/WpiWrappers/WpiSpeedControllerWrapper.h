@@ -10,16 +10,18 @@
 
 #include <memory>
 
-#include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/ISpeedControllerWrapper.h"
 #include "SnobotSim/MotorSim/IMotorSimulator.h"
 #include "SnobotSim/SimulatorComponents/IFeedbackSensor.h"
+#include "lowfisim/SimulatorComponentBase.h"
 
-class WpiSpeedControllerWrapper : public AModuleWrapper, public ISpeedControllerWrapper
+class WpiSpeedControllerWrapper : public frc::sim::lowfi::SimulatorComponentBase, public ISpeedControllerWrapper
 {
 public:
     explicit WpiSpeedControllerWrapper(int aPort);
     virtual ~WpiSpeedControllerWrapper();
+
+    bool IsWrapperInitialized() const override;
 
     int GetId() override;
 

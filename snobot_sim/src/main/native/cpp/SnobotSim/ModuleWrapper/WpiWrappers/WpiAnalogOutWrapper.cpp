@@ -8,16 +8,19 @@
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAnalogOutWrapper.h"
 
 #include "mockdata/AnalogOutData.h"
-#include "SnobotSim/PortUnwrapper.h"
 
 WpiAnalogOutWrapper::WpiAnalogOutWrapper(int aPort) :
-        AModuleWrapper("Analog Out " + std::to_string(UnwrapPort(aPort))),
         mHandle(aPort)
 {
 }
 
 WpiAnalogOutWrapper::~WpiAnalogOutWrapper()
 {
+}
+
+bool WpiAnalogOutWrapper::IsWrapperInitialized() const
+{
+    return HALSIM_GetAnalogOutInitialized(mHandle);
 }
 
 void WpiAnalogOutWrapper::SetVoltage(double aVoltage)

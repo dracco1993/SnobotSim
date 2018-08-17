@@ -9,6 +9,7 @@
 
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiEncoderWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 EncoderFactory::EncoderFactory()
@@ -31,6 +32,8 @@ bool EncoderFactory::Create(int aHandle, const std::string& aType)
 
             SensorActuatorRegistry::Get().Register(aHandle,
                     std::shared_ptr<IEncoderWrapper>(new WpiEncoderWrapper(aHandle, aHandle)));
+
+            SensorActuatorRegistry::Get().GetIEncoderWrapper(aHandle)->SetDisplayName("Encoder " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

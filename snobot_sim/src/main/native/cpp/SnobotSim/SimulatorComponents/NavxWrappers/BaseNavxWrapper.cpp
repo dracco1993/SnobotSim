@@ -8,15 +8,63 @@
 #include "SnobotSim/SimulatorComponents/NavxWrappers/BaseNavxWrapper.h"
 
 #include "SnobotSim/SensorActuatorRegistry.h"
+#include "lowfisim/SimpleAccelerometerSim.h"
 
 BaseNavxWrapper::BaseNavxWrapper(int aBasePort, const std::shared_ptr<NavxSimulator>& aNavx) :
-        mXWrapper(new AccelerometerWrapper(AccelerometerWrapper::AXIS_X, aNavx)),
-        mYWrapper(new AccelerometerWrapper(AccelerometerWrapper::AXIS_Y, aNavx)),
-        mZWrapper(new AccelerometerWrapper(AccelerometerWrapper::AXIS_Z, aNavx)),
+        mNavx(aNavx),
+        mXWrapper(new frc::sim::lowfi::SimpleAccelerometerSim(
+                std::function<bool(void)>(
+                        std::bind(&NavxSimulator::GetInitialized,
+                                mNavx.get())),
+                std::function<void(double)>(
+                        std::bind(&NavxSimulator::SetX,
+                                mNavx.get(), std::placeholders::_1)),
+                std::function<double(void)>(
+                        std::bind(&NavxSimulator::GetX,
+                                mNavx.get())))),
+        mYWrapper(new frc::sim::lowfi::SimpleAccelerometerSim(
+                std::function<bool(void)>(
+                        std::bind(&NavxSimulator::GetInitialized,
+                                mNavx.get())),
+                std::function<void(double)>(
+                        std::bind(&NavxSimulator::SetY,
+                                mNavx.get(), std::placeholders::_1)),
+                std::function<double(void)>(
+                        std::bind(&NavxSimulator::GetY,
+                                mNavx.get())))),
+        mZWrapper(new frc::sim::lowfi::SimpleAccelerometerSim(
+                std::function<bool(void)>(
+                        std::bind(&NavxSimulator::GetInitialized,
+                                mNavx.get())),
+                std::function<void(double)>(
+                        std::bind(&NavxSimulator::SetZ,
+                                mNavx.get(), std::placeholders::_1)),
+                std::function<double(void)>(
+                        std::bind(&NavxSimulator::GetZ,
+                                mNavx.get())))),
 
-        mYawWrapper(new GyroWrapper(GyroWrapper::AXIS_YAW, aNavx)),
-        mPitchWrapper(new GyroWrapper(GyroWrapper::AXIS_PITCH, aNavx)),
-        mRollWrapper(new GyroWrapper(GyroWrapper::AXIS_ROLL, aNavx))
+        mYawWrapper(new GyroWrapper(mNavx,
+                std::function<void(double)>(
+                        std::bind(&NavxSimulator::SetYaw,
+                                mNavx.get(), std::placeholders::_1)),
+                std::function<double(void)>(
+                        std::bind(&NavxSimulator::GetYaw,
+                                mNavx.get())))),
+
+        mPitchWrapper(new GyroWrapper(mNavx,
+                std::function<void(double)>(
+                        std::bind(&NavxSimulator::SetPitch,
+                                mNavx.get(), std::placeholders::_1)),
+                std::function<double(void)>(
+                        std::bind(&NavxSimulator::GetPitch,
+                                mNavx.get())))),
+        mRollWrapper(new GyroWrapper(mNavx,
+                std::function<void(double)>(
+                        std::bind(&NavxSimulator::SetRoll,
+                                mNavx.get(), std::placeholders::_1)),
+                std::function<double(void)>(
+                        std::bind(&NavxSimulator::GetRoll,
+                                mNavx.get()))))
 {
     SensorActuatorRegistry::Get().Register(aBasePort + 0, mXWrapper);
     SensorActuatorRegistry::Get().Register(aBasePort + 1, mYWrapper);
@@ -31,86 +79,17 @@ BaseNavxWrapper::~BaseNavxWrapper()
 {
 }
 
-BaseNavxWrapper::AccelerometerWrapper::AccelerometerWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aNavx) :
-        AModuleWrapper("Hello"),
-        mAxisType(aAxisType),
-        mNavx(aNavx)
+BaseNavxWrapper::GyroWrapper::GyroWrapper(
+        const std::shared_ptr<NavxSimulator>& aNavx,
+        const std::function<void(double)>& setterFunction,
+        const std::function<double(void)>& getterFunction) :
+        mNavx(aNavx),
+        m_setAngleFunction(setterFunction),
+        m_getAngleFunction(getterFunction)
 {
 }
 
-void BaseNavxWrapper::AccelerometerWrapper::SetAcceleration(double aAcceleration)
+bool BaseNavxWrapper::GyroWrapper::IsWrapperInitialized() const
 {
-    if (!mNavx)
-    {
-        return;
-    }
-
-    switch (mAxisType)
-    {
-    case AXIS_X:
-        mNavx->SetX(aAcceleration);
-        break;
-    case AXIS_Y:
-        mNavx->SetY(aAcceleration);
-        break;
-    case AXIS_Z:
-        mNavx->SetZ(aAcceleration);
-        break;
-    }
-}
-
-double BaseNavxWrapper::AccelerometerWrapper::GetAcceleration()
-{
-    if (!mNavx)
-    {
-        return 0;
-    }
-
-    switch (mAxisType)
-    {
-    case AXIS_X:
-        return mNavx->GetX();
-    case AXIS_Y:
-        return mNavx->GetY();
-    case AXIS_Z:
-        return mNavx->GetZ();
-    }
-    return 0;
-}
-
-BaseNavxWrapper::GyroWrapper::GyroWrapper(AxisType aAxisType, const std::shared_ptr<NavxSimulator>& aNavx) :
-        AModuleWrapper("Hello"),
-        mAxisType(aAxisType),
-        mNavx(aNavx)
-{
-}
-
-void BaseNavxWrapper::GyroWrapper::SetAngle(double aAngle)
-{
-    switch (mAxisType)
-    {
-    case AXIS_YAW:
-        mNavx->SetYaw(aAngle);
-        break;
-    case AXIS_PITCH:
-        mNavx->SetPitch(aAngle);
-        break;
-    case AXIS_ROLL:
-        mNavx->SetRoll(aAngle);
-        break;
-    }
-}
-
-double BaseNavxWrapper::GyroWrapper::GetAngle()
-{
-    switch (mAxisType)
-    {
-    case AXIS_YAW:
-        return mNavx->GetYaw();
-    case AXIS_PITCH:
-        return mNavx->GetPitch();
-    case AXIS_ROLL:
-        return mNavx->GetRoll();
-    }
-    return 0;
+    return mNavx->GetInitialized();
 }

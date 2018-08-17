@@ -5,7 +5,6 @@
 
 #include "SnobotSim/GetSensorActuatorHelper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IGyroWrapper.h"
 #include "SnobotSim/ModuleWrapper/Factories/FactoryContainer.h"
 #include "com_snobot_simulator_jni_module_wrapper_GyroWrapperJni.h"
 #include "wpi/jni_util.h"
@@ -22,7 +21,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapperJni_isInitialized
   (JNIEnv *, jclass, jint aPortHandle)
 {
-	return SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->IsInitialized();
+	return SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->IsWrapperInitialized();
 }
 
 /*
@@ -48,7 +47,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapper
     std::shared_ptr<IGyroWrapper> wrapper = GetSensorActuatorHelper::GetIGyroWrapper(aPortHandle);
     if(wrapper)
     {
-        wrapper->SetName(env->GetStringUTFChars(aName, NULL));
+        wrapper->SetDisplayName(env->GetStringUTFChars(aName, NULL));
     }
 }
 
@@ -60,7 +59,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapper
 JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapperJni_getName
   (JNIEnv * env, jclass, jint aPortHandle)
 {
-    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->GetName());
+    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->GetDisplayName());
     return output;
 }
 
@@ -72,7 +71,8 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrap
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_GyroWrapperJni_getWantsHidden
   (JNIEnv *, jclass, jint aPortHandle)
 {
-    return SensorActuatorRegistry::Get().GetIGyroWrapper(aPortHandle)->WantsHidden();
+    SNOBOT_LOG(SnobotLogging::WARN, "Deprecated");
+    return false;
 }
 
 /*

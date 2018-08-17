@@ -22,7 +22,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SolenoidWrapperJni_isInitialized
   (JNIEnv *, jclass, jint aPortHandle)
 {
-	return SensorActuatorRegistry::Get().GetISolenoidWrapper(aPortHandle)->IsInitialized();
+	return SensorActuatorRegistry::Get().GetISolenoidWrapper(aPortHandle)->IsWrapperInitialized();
 }
 /*
  * Class:     com_snobot_simulator_jni_module_wrapper_SolenoidWrapperJni
@@ -35,7 +35,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SolenoidWra
     std::shared_ptr<ISolenoidWrapper> wrapper = GetSensorActuatorHelper::GetISolenoidWrapper(aPortHandle);
     if(wrapper)
     {
-        wrapper->SetName(env->GetStringUTFChars(aName, NULL));
+        wrapper->SetDisplayName(env->GetStringUTFChars(aName, NULL));
     }
 }
 
@@ -47,7 +47,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SolenoidWra
 JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SolenoidWrapperJni_getName(JNIEnv * env, jclass, jint portHandle)
 {
 
-    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetISolenoidWrapper(portHandle)->GetName());
+    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetISolenoidWrapper(portHandle)->GetDisplayName());
 
     return output;
 }
@@ -59,7 +59,8 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_Solenoid
  */
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_SolenoidWrapperJni_getWantsHidden(JNIEnv *, jclass, jint portHandle)
 {
-    return SensorActuatorRegistry::Get().GetISolenoidWrapper(portHandle)->WantsHidden();
+    SNOBOT_LOG(SnobotLogging::WARN, "Deprecated");
+    return false;
 }
 
 /*

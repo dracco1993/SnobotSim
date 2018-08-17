@@ -9,6 +9,7 @@
 
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiRelayWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 RelayFactory::RelayFactory()
@@ -31,6 +32,8 @@ bool RelayFactory::Create(int aHandle, const std::string& aType)
 
             SensorActuatorRegistry::Get().Register(aHandle,
                     std::shared_ptr<IRelayWrapper>(new WpiRelayWrapper(aHandle)));
+
+            SensorActuatorRegistry::Get().GetIRelayWrapper(aHandle)->SetDisplayName("Relay " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

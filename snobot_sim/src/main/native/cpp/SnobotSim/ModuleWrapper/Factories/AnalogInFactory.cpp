@@ -9,6 +9,7 @@
 
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAnalogInWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 AnalogInFactory::AnalogInFactory()
@@ -31,6 +32,8 @@ bool AnalogInFactory::Create(int aHandle, const std::string& aType)
 
             SensorActuatorRegistry::Get().Register(aHandle,
                     std::shared_ptr<IAnalogInWrapper>(new WpiAnalogInWrapper(aHandle)));
+
+            SensorActuatorRegistry::Get().GetIAnalogInWrapper(aHandle)->SetDisplayName("Analog In " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

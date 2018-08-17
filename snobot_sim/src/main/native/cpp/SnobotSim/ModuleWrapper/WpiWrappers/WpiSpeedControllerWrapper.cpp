@@ -7,10 +7,9 @@
 
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiSpeedControllerWrapper.h"
 
-#include "SnobotSim/PortUnwrapper.h"
+#include "mockdata/PWMData.h"
 
 WpiSpeedControllerWrapper::WpiSpeedControllerWrapper(int aPort) :
-        AModuleWrapper("Speed Controller " + std::to_string(UnwrapPort(aPort))),
         mId(aPort),
         mMotorSimulator(new NullMotorSimulator),
         mFeedbackSensor(new NullFeedbackSensor)
@@ -19,6 +18,11 @@ WpiSpeedControllerWrapper::WpiSpeedControllerWrapper(int aPort) :
 
 WpiSpeedControllerWrapper::~WpiSpeedControllerWrapper()
 {
+}
+
+bool WpiSpeedControllerWrapper::IsWrapperInitialized() const
+{
+    return HALSIM_GetPWMInitialized(mId);
 }
 
 int WpiSpeedControllerWrapper::GetId()

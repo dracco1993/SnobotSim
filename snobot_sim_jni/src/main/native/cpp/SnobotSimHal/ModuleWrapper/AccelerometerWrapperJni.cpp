@@ -4,7 +4,6 @@
 #include <cassert>
 
 #include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IAccelerometerWrapper.h"
 #include "com_snobot_simulator_jni_module_wrapper_GyroWrapperJni.h"
 #include "wpi/jni_util.h"
 
@@ -20,7 +19,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_AccelerometerWrapperJni_isInitialized
   (JNIEnv *, jclass, jint aPortHandle)
 {
-	return SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->IsInitialized();
+	return SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->IsWrapperInitialized();
 }
 
 /*
@@ -31,7 +30,7 @@ JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_Acceler
 JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_AccelerometerWrapperJni_setName
   (JNIEnv * env, jclass, jint aPortHandle, jstring aName)
 {
-    SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->SetName(env->GetStringUTFChars(aName, NULL));
+    SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->SetDisplayName(env->GetStringUTFChars(aName, NULL));
 }
 
 /*
@@ -42,7 +41,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_Acceleromet
 JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_AccelerometerWrapperJni_getName
   (JNIEnv * env, jclass, jint aPortHandle)
 {
-    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->GetName());
+    jstring output = MakeJString(env, SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->GetDisplayName());
     return output;
 }
 
@@ -54,7 +53,8 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_Accelero
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_AccelerometerWrapperJni_getWantsHidden
   (JNIEnv * env, jclass, jint aPortHandle)
 {
-    return SensorActuatorRegistry::Get().GetIAccelerometerWrapper(aPortHandle)->WantsHidden();
+    SNOBOT_LOG(SnobotLogging::WARN, "Deprecated");
+    return false;
 }
 
 /*

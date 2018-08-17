@@ -9,6 +9,7 @@
 
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiDigitalIoWrapper.h"
+#include "SnobotSim/PortUnwrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 
 DigitalIoFactory::DigitalIoFactory()
@@ -31,6 +32,8 @@ bool DigitalIoFactory::Create(int aHandle, const std::string& aType)
 
             SensorActuatorRegistry::Get().Register(aHandle,
                     std::shared_ptr<IDigitalIoWrapper>(new WpiDigitalIoWrapper(aHandle)));
+
+            SensorActuatorRegistry::Get().GetIDigitalIoWrapper(aHandle)->SetDisplayName("Digital IO " + std::to_string(UnwrapPort(aHandle)));
         }
     }
     else

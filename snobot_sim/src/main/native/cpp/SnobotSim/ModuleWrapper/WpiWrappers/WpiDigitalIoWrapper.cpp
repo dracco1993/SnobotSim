@@ -8,16 +8,19 @@
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiDigitalIoWrapper.h"
 
 #include "mockdata/DIOData.h"
-#include "SnobotSim/PortUnwrapper.h"
 
 WpiDigitalIoWrapper::WpiDigitalIoWrapper(int aPort) :
-        AModuleWrapper("Digital IO " + std::to_string(UnwrapPort(aPort))),
         mHandle(aPort)
 {
 }
 
 WpiDigitalIoWrapper::~WpiDigitalIoWrapper()
 {
+}
+
+bool WpiDigitalIoWrapper::IsWrapperInitialized() const
+{
+    return HALSIM_GetDIOInitialized(mHandle);
 }
 
 bool WpiDigitalIoWrapper::Get()

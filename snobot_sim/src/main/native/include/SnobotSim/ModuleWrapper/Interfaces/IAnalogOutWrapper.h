@@ -8,9 +8,9 @@
 #ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_INTERFACES_IANALOGOUTWRAPPER_H_
 #define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_INTERFACES_IANALOGOUTWRAPPER_H_
 
-#include "SnobotSim/ModuleWrapper/Interfaces/ISensorWrapper.h"
+#include "lowfisim/SimulatorComponent.h"
 
-class IAnalogOutWrapper : public virtual ISensorWrapper
+class IAnalogOutWrapper : public virtual frc::sim::lowfi::SimulatorComponent
 {
 public:
     virtual void SetVoltage(double aVoltage) = 0;

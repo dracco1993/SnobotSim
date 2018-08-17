@@ -1,13 +1,13 @@
 
 #include "SnobotSim/HalCallbacks/AnalogIOCallbacks.h"
 
-#include "mockdata/AnalogInData.h"
-#include "mockdata/AnalogOutData.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/ModuleWrapper/Factories/FactoryContainer.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAnalogInWrapper.h"
 #include "SnobotSim/ModuleWrapper/WpiWrappers/WpiAnalogOutWrapper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
+#include "mockdata/AnalogInData.h"
+#include "mockdata/AnalogOutData.h"
 
 void AnalogInCallback(const char* name, void* param, const struct HAL_Value* value)
 {
@@ -20,7 +20,6 @@ void AnalogInCallback(const char* name, void* param, const struct HAL_Value* val
         {
             FactoryContainer::Get().GetAnalogInFactory()->Create(port, "WpiAnalogInWrapper");
         }
-        SensorActuatorRegistry::Get().GetIAnalogInWrapper(port)->SetInitialized(true);
     }
     else
     {
@@ -39,7 +38,6 @@ void AnalogOutCallback(const char* name, void* param, const struct HAL_Value* va
         {
             FactoryContainer::Get().GetAnalogOutFactory()->Create(port, "WpiAnalogOutWrapper");
         }
-        SensorActuatorRegistry::Get().GetIAnalogOutWrapper(port)->SetInitialized(true);
     }
     else
     {

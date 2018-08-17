@@ -24,7 +24,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_DigitalSourceWrapperJni_isInitialized
   (JNIEnv *, jclass, jint aPortHandle)
 {
-	return SensorActuatorRegistry::Get().GetIDigitalIoWrapper(aPortHandle)->IsInitialized();
+	return SensorActuatorRegistry::Get().GetIDigitalIoWrapper(aPortHandle)->IsWrapperInitialized();
 }
 
 /*
@@ -38,7 +38,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_DigitalSour
     std::shared_ptr<IDigitalIoWrapper> wrapper = GetSensorActuatorHelper::GetIDigitalIoWrapper(aPortHandle);
     if(wrapper)
     {
-        wrapper->SetName(env->GetStringUTFChars(aName, NULL));
+        wrapper->SetDisplayName(env->GetStringUTFChars(aName, NULL));
     }
 }
 
@@ -51,7 +51,7 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_DigitalS
         JNIEnv * env, jclass, jint portHandle)
 {
     return MakeJString(env,
-            SensorActuatorRegistry::Get().GetIDigitalIoWrapper(portHandle)->GetName());
+            SensorActuatorRegistry::Get().GetIDigitalIoWrapper(portHandle)->GetDisplayName());
 }
 
 /*
@@ -61,7 +61,8 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_DigitalS
  */
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_DigitalSourceWrapperJni_getWantsHidden(JNIEnv *, jclass, jint portHandle)
 {
-    return SensorActuatorRegistry::Get().GetIDigitalIoWrapper(portHandle)->WantsHidden();
+    SNOBOT_LOG(SnobotLogging::WARN, "Deprecated");
+    return false;
 }
 
 /*

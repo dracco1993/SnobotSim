@@ -36,6 +36,11 @@ I2CNavxSimulator::~I2CNavxSimulator()
     HALSIM_CancelI2CWriteCallback(mPort, mWriteCallbackId);
 }
 
+bool I2CNavxSimulator::GetInitialized() const
+{
+    return HALSIM_GetI2CInitialized(mPort);
+}
+
 void I2CNavxSimulator::HandleWrite(const uint8_t* buffer, uint32_t count)
 {
     mLastWriteAddress = buffer[0];

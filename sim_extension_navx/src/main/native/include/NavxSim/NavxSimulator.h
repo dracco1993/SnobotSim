@@ -20,6 +20,8 @@ public:
     NavxSimulator();
     virtual ~NavxSimulator();
 
+    virtual bool GetInitialized() const = 0;
+
     virtual void ResetData();
 
     double GetX();

@@ -14,7 +14,6 @@
 #include "SnobotSim/MotorSim/StaticLoadDcMotorSim.h"
 #include "SnobotSim/RobotStateSingleton.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IGyroWrapper.h"
 #include "SnobotSim/SimulatorComponents/ISimulatorUpdater.h"
 #include "SnobotSim/SimulatorComponents/TankDriveSimulator.h"
 

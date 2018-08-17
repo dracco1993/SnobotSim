@@ -8,7 +8,6 @@
 #include "SnobotSim/ModuleWrapper/Factories/I2CWrapperFactory.h"
 
 #include "SnobotSim/GetSensorActuatorHelper.h"
-#include "SnobotSim/SimulatorComponents/AdxWrappers/AdxI2CAccelWrapper.h"
 #include "SnobotSim/SimulatorComponents/NavxWrappers/I2CNavxWrapper.h"
 
 const std::string I2CWrapperFactory::I2C_ACCELEROMETER_NAME = "ADXL345";
@@ -68,7 +67,8 @@ std::shared_ptr<II2CWrapper> I2CWrapperFactory::CreateWrapper(int aPort, const s
 
     if (aType == I2C_ACCELEROMETER_NAME)
     {
-        return std::shared_ptr<II2CWrapper>(new AdxI2CAccelWrapper(aPort));
+        //    	std::shared_ptr<II2CWrapper> output(new AdxI2CAccelWrapper(aPort));
+        //        return output;
     }
 
     SNOBOT_LOG(SnobotLogging::CRITICAL, "Unknown simulator type '" << aType << "', defaulting to null");

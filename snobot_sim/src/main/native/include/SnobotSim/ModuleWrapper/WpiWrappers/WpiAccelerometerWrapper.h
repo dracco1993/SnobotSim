@@ -5,23 +5,25 @@
  *      Author: PJ
  */
 
-#ifndef SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIACCELEROMETERWRAPPER_H_
-#define SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIACCELEROMETERWRAPPER_H_
+#ifndef SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIACCELEROMETERWRAPPER_H_
+#define SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIACCELEROMETERWRAPPER_H_
 
-#include "SnobotSim/ModuleWrapper/AModuleWrapper.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IAccelerometerWrapper.h"
+#include <string>
 
-class WpiAccelerometerWrapper : public AModuleWrapper, public IAccelerometerWrapper
+#include "lowfisim/SimpleAccelerometerSim.h"
+#include "lowfisim/SimulatorComponentBase.h"
+
+class WpiAccelerometerWrapper : public frc::sim::lowfi::SimulatorComponentBase, public frc::sim::lowfi::AccelerometerSim
 {
 public:
-	WpiAccelerometerWrapper(const std::string& aName, frc::sim::lowfi::AccelerometerSim& accelerometer);
-	virtual ~WpiAccelerometerWrapper();
+    WpiAccelerometerWrapper(const std::string& aName, frc::sim::lowfi::AccelerometerSim& accelerometer);
+    virtual ~WpiAccelerometerWrapper();
 
-	  virtual double GetAcceleration();
-	  virtual void SetAcceleration(double acceleration);
+    virtual double GetAcceleration();
+    virtual void SetAcceleration(double acceleration);
 
 protected:
-	  frc::sim::lowfi::AccelerometerSim& mAccelerometer;
+    frc::sim::lowfi::AccelerometerSim& mAccelerometer;
 };
 
-#endif /* SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIACCELEROMETERWRAPPER_H_ */
+#endif // SNOBOTSIM_SNOBOT_SIM_SRC_MAIN_NATIVE_INCLUDE_SNOBOTSIM_MODULEWRAPPER_WPIWRAPPERS_WPIACCELEROMETERWRAPPER_H_

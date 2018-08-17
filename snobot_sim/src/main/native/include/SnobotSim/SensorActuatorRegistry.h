@@ -15,12 +15,10 @@
 
 #include "SnobotSim/ExportHelper.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IAccelerometerWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IAnalogInWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IAnalogOutWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IDigitalIoWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IEncoderWrapper.h"
-#include "SnobotSim/ModuleWrapper/Interfaces/IGyroWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/II2CWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/IRelayWrapper.h"
 #include "SnobotSim/ModuleWrapper/Interfaces/ISolenoidWrapper.h"
@@ -28,6 +26,8 @@
 #include "SnobotSim/ModuleWrapper/Interfaces/ISpiWrapper.h"
 #include "SnobotSim/SimulatorComponents/ISimulatorUpdater.h"
 #include "SnobotSim/StackHelper/StackTraceHelper.h"
+#include "lowfisim/AccelerometerSim.h"
+#include "lowfisim/GyroSim.h"
 
 class CompressorWrapper;
 
@@ -36,6 +36,9 @@ class CompressorWrapper;
     std::shared_ptr<ItemType> Get##ItemType(int aPort, bool aLogError = true);  \
     const std::map<int, std::shared_ptr<ItemType>>& Get##ItemType##Map() const; \
     std::map<int, std::shared_ptr<ItemType>>& Get##ItemType##Map();
+
+typedef frc::sim::lowfi::AccelerometerSim IAccelerometerWrapper;
+typedef frc::sim::lowfi::GyroSim IGyroWrapper;
 
 class EXPORT_ SensorActuatorRegistry
 {

@@ -22,7 +22,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_RelayWrapperJni_isInitialized
   (JNIEnv *, jclass, jint aPortHandle)
 {
-	return SensorActuatorRegistry::Get().GetIRelayWrapper(aPortHandle)->IsInitialized();
+	return SensorActuatorRegistry::Get().GetIRelayWrapper(aPortHandle)->IsWrapperInitialized();
 }
 
 /*
@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_com_snobot_simulator_jni_module_1wrapper_RelayWrappe
     std::shared_ptr<IRelayWrapper> wrapper = GetSensorActuatorHelper::GetIRelayWrapper(aPortHandle);
     if(wrapper)
     {
-        wrapper->SetName(env->GetStringUTFChars(aName, NULL));
+        wrapper->SetDisplayName(env->GetStringUTFChars(aName, NULL));
     }
 }
 
@@ -49,7 +49,7 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_RelayWra
         JNIEnv * env, jclass, jint portHandle)
 {
     return MakeJString(env,
-            SensorActuatorRegistry::Get().GetIRelayWrapper(portHandle)->GetName());
+            SensorActuatorRegistry::Get().GetIRelayWrapper(portHandle)->GetDisplayName());
 }
 
 /*
@@ -59,7 +59,8 @@ JNIEXPORT jstring JNICALL Java_com_snobot_simulator_jni_module_1wrapper_RelayWra
  */
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_module_1wrapper_RelayWrapperJni_getWantsHidden(JNIEnv *, jclass, jint portHandle)
 {
-    return SensorActuatorRegistry::Get().GetIRelayWrapper(portHandle)->WantsHidden();
+    SNOBOT_LOG(SnobotLogging::WARN, "Deprecated");
+    return false;
 }
 
 /*
