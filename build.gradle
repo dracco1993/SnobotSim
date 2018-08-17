@@ -33,7 +33,7 @@ ext.build_simulator_java = true
 // Specify WPI Versions
 
 ext.allwpilibVersion = {
-    return 'POOP'
+    return '2018.4.1-20180802004727-1151-gc2ceebf'
 }
 
 ext.getWpiUtilVersion = {
