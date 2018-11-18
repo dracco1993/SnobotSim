@@ -5,8 +5,17 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'cpp'
 apply plugin: 'visual-studio'
 apply plugin: 'edu.wpi.first.NativeUtils'
+apply plugin: 'google-test-test-suite'
 
 apply from: "${rootDir}/common/config.gradle"
+
+
+ext {
+    staticGtestConfigs = [:]
+}
+
+staticGtestConfigs["snobotSimCppTest"] = []
+apply from: "${rootDir}/common/gtest.gradle"
 
 ext.addSnobotSimToLinker = { binary->
     binary.lib project: ':snobot_sim', library: 'snobotSimCpp', linkage: 'shared'
@@ -41,7 +50,7 @@ model {
             headerClassifier = 'headers'
             ext = 'zip'
             version = getWpiUtilVersion()
-            sharedConfigs = [ snobotSimCpp: [] ]
+            sharedConfigs = [ snobotSimCpp: [], snobotSimCppTest: [] ]
         }
         halsim(DependencyConfig) {
             groupId = 'edu.wpi.first.hal'
@@ -49,7 +58,7 @@ model {
             headerClassifier = 'headers'
             ext = 'zip'
             version = allwpilibVersion()
-            sharedConfigs = [ snobotSimCpp: [], standaloneSnobotSimBase: [] ]
+            sharedConfigs = [ snobotSimCpp: [], snobotSimCppTest: [] ]
         }
         adxfamily(DependencyConfig) {
             groupId = 'edu.wpi.first.halsim'
@@ -57,7 +66,7 @@ model {
             headerClassifier = 'headers'
             ext = 'zip'
             version = allwpilibVersion()
-            sharedConfigs = [ snobotSimCpp: [] ]
+            sharedConfigs = [ snobotSimCpp: [], snobotSimCppTest: [] ]
         }
     }
     components {
@@ -77,10 +86,36 @@ model {
                         srcDirs = ["src/main/native/include"]
                     }
                     lib project: ':sim_extension_navx', library: 'navx_simulator_jni', linkage: 'shared'
+                    lib project: ':3rdParty', library: 'yamlcpp', linkage: 'static'
+                }
+            }
+            appendDebugPathToBinaries(binaries)
+        }
+    }
+    testSuites {
+        snobotSimCppTest(GoogleTestTestSuiteSpec) {
+            for(NativeComponentSpec c : $.components) {
+                if (c.name == "snobotSimCpp") {
+                    testing c
+                    break
+                }
+            }
+            sources {
+                cpp {
+                    source {
+                        srcDirs 'src/test/native/cpp'
+                        include '**/*.cpp'
+                    }
                 }
             }
         }
+
     }
+}
+
+tasks.withType(RunTestExecutable) {
+    args "--gtest_output=xml:test_detail.xml"
+    outputs.dir outputDir
 }
 
 apply from: 'publish.gradle'

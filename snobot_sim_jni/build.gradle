@@ -78,6 +78,7 @@ dependencies {
 
 apply from: "${rootDir}/common/extract_native_libraries.gradle"
 test.dependsOn extract_wpilib
+test.dependsOn project(':snobot_sim').packageNativeFilesInJar
 
 
 model {

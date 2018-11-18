@@ -19,6 +19,7 @@ include 'sim_adx_family'
 include 'snobot_sim_utilities'
 include 'snobot_sim_gui'
 include 'sim_extension_navx'
+include '3rdParty'
 
 
 rootProject.name = 'CppSimulator'
