@@ -9,10 +9,10 @@ import com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig;
 import com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig;
 import com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig;
 import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
-import com.snobot.test.utilities.BaseSimulatorTest;
+import com.snobot.test.utilities.BaseSimulatorJavaTest;
 import com.snobot.test.utilities.MockRobot;
 
-public class TestWriteConfig extends BaseSimulatorTest
+public class TestWriteConfig extends BaseSimulatorJavaTest
 {
     @Test
     public void testWriteConfig()

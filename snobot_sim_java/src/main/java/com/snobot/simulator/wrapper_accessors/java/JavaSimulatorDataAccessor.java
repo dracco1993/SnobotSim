@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.snobot.simulator.SensorActuatorRegistry;
+import com.snobot.simulator.config.SimulatorConfigWriter;
+import com.snobot.simulator.config.v1.SimulatorConfigReaderV1;
 import com.snobot.simulator.jni.RegisterCallbacksJni;
 import com.snobot.simulator.module_wrapper.interfaces.IPwmWrapper;
 import com.snobot.simulator.module_wrapper.interfaces.ISimulatorUpdater;
@@ -200,6 +202,18 @@ public class JavaSimulatorDataAccessor implements SimulatorDataAccessor
                 break;
             }
         }
+    }
+
+    @Override
+    public boolean loadConfigFile(String aConfigFile)
+    {
+        return new SimulatorConfigReaderV1().loadConfig(aConfigFile);
+    }
+
+    @Override
+    public boolean saveConfigFile(String aConfigFile)
+    {
+        return new SimulatorConfigWriter().writeConfig(aConfigFile);
     }
 
 }
