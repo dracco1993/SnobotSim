@@ -21,7 +21,7 @@
         SNOBOT_LOG(SnobotLogging::LOG_LEVEL_INFO, "Starting SnobotSim with " << #_ClassName_ <<                                          \
             " with simulator " << #_SimulatorName_ << ", and config file '" << _SimulatorConfigFile_ << "'");                            \
         SimulatorConfigReaderV1 configReader;                                                                                            \
-        configReader.LoadConfig("F:/git/FIRST/SnobotSim/examples/CppWithGuiExample/simulator_config/simulator_config.yml");              \
+        configReader.LoadConfig(_SimulatorConfigFile_);                                                                                  \
         static _ClassName_ robot;                                                                                                        \
         static _SimulatorName_ simulator;                                                                                                \
         std::thread t(&_SimulatorName_::UpdateSimulatorComponentsThread, simulator);                                                     \

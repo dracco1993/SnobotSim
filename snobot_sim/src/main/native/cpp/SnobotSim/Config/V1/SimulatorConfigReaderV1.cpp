@@ -6,6 +6,7 @@
 #include "SnobotSim/SensorActuatorRegistry.h"
 #include "yaml-cpp/yaml.h"
 #include <iostream>
+#include <filesystem>
 
 
 template <typename T>
@@ -121,8 +122,11 @@ void SetupSimulator(const SimulatorConfigV1& aConfig)
 
 bool SimulatorConfigReaderV1::LoadConfig(const std::string& aConfigFile)
 {
+    namespace fs = std::experimental::filesystem;
+    fs::path configFile = aConfigFile;
+
     bool success = true;
-    SNOBOT_LOG(SnobotLogging::LOG_LEVEL_INFO, "Loading config file '" << aConfigFile << "'");
+    SNOBOT_LOG(SnobotLogging::LOG_LEVEL_INFO, "Loading config file '" << fs::canonical(configFile) << "'");
 
     try
     {
