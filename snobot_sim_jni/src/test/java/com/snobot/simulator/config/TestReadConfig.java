@@ -3,51 +3,40 @@ package com.snobot.simulator.config;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.snobot.simulator.config.v1.SimulatorConfigReaderV1;
 import com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig;
 import com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig;
 import com.snobot.simulator.wrapper_accessors.DataAccessorFactory;
-import com.snobot.test.utilities.BaseSimulatorJavaTest;
+import com.snobot.test.utilities.BaseSimulatorJniTest;
 
 
-public class TestReadConfig extends BaseSimulatorJavaTest
+public class TestReadConfig extends BaseSimulatorJniTest
 {
-    public static final int sTEST_PARAMETER = 5;
-
     @Test
     public void testReadEmptyFile()
     {
         String file = "test_files/ConfigTest/ReadConfig/emptyFile.yml";
-        SimulatorConfigReaderV1 reader = new SimulatorConfigReaderV1();
-        Assertions.assertTrue(reader.loadConfig(file));
-        Assertions.assertNotNull(reader.getConfig());
+        Assertions.assertTrue(DataAccessorFactory.getInstance().getSimulatorDataAccessor().loadConfigFile(file));
     }
 
     @Test
     public void testReadNullFile()
     {
         String file = null;
-        SimulatorConfigReaderV1 reader = new SimulatorConfigReaderV1();
-        Assertions.assertTrue(reader.loadConfig(file));
-        Assertions.assertNull(reader.getConfig());
+        Assertions.assertTrue(DataAccessorFactory.getInstance().getSimulatorDataAccessor().loadConfigFile(file));
     }
 
     @Test
     public void testReadNonExistingFile()
     {
         String file = "does_not_exist.yml";
-        SimulatorConfigReaderV1 reader = new SimulatorConfigReaderV1();
-        Assertions.assertFalse(reader.loadConfig(file));
-        Assertions.assertNull(reader.getConfig());
+        Assertions.assertFalse(DataAccessorFactory.getInstance().getSimulatorDataAccessor().loadConfigFile(file));
     }
 
     @Test
     public void testReadConfig()
     {
         String file = "test_files/ConfigTest/ReadConfig/testReadFile.yml";
-        SimulatorConfigReaderV1 reader = new SimulatorConfigReaderV1();
-        Assertions.assertTrue(reader.loadConfig(file));
-        Assertions.assertNotNull(reader.getConfig());
+        Assertions.assertTrue(DataAccessorFactory.getInstance().getSimulatorDataAccessor().loadConfigFile(file));
 
         Assertions.assertEquals("I2C ADXL345 X Accel", DataAccessorFactory.getInstance().getAccelerometerAccessor().getName(50));
         Assertions.assertEquals("I2C ADXL345 Y Accel", DataAccessorFactory.getInstance().getAccelerometerAccessor().getName(51));
@@ -112,58 +101,5 @@ public class TestReadConfig extends BaseSimulatorJavaTest
         }
 
         Assertions.assertEquals(3, DataAccessorFactory.getInstance().getSimulatorDataAccessor().getSimulatorComponentConfigs().size());
-    }
-
-    @Test
-    public void testReadLegacyConfigWithoutCan()
-    {
-        String file = "test_files/ConfigTest/ReadConfig/testLegacyConfigFileWithoutCan.yml";
-        SimulatorConfigReaderV1 reader = new SimulatorConfigReaderV1();
-        Assertions.assertTrue(reader.loadConfig(file));
-        Assertions.assertNotNull(reader.getConfig());
-
-        Assertions.assertEquals("Digital Source6", DataAccessorFactory.getInstance().getDigitalAccessor().getName(6));
-        Assertions.assertEquals("Digital Source7", DataAccessorFactory.getInstance().getDigitalAccessor().getName(7));
-        Assertions.assertEquals("Digital Source8", DataAccessorFactory.getInstance().getDigitalAccessor().getName(8));
-        Assertions.assertEquals("Digital Source9", DataAccessorFactory.getInstance().getDigitalAccessor().getName(9));
-
-        Assertions.assertEquals("drive right", DataAccessorFactory.getInstance().getEncoderAccessor().getName(0));
-        Assertions.assertEquals("drive left", DataAccessorFactory.getInstance().getEncoderAccessor().getName(1));
-        Assertions.assertEquals("Elevator", DataAccessorFactory.getInstance().getEncoderAccessor().getName(2));
-
-        Assertions.assertEquals("Robot Gyro", DataAccessorFactory.getInstance().getGyroAccessor().getName(100));
-
-        Assertions.assertEquals("Drive Left", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(0));
-        Assertions.assertEquals("Drive Right", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(1));
-        Assertions.assertEquals("Elevator", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(2));
-
-        Assertions.assertEquals("Claw (A)", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(1));
-        Assertions.assertEquals("Claw (B)", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(2));
-    }
-
-    @Test
-    public void testReadLegacyConfigWithCan()
-    {
-        String file = "test_files/ConfigTest/ReadConfig/testLegacyConfigFileWithCan.yml";
-        SimulatorConfigReaderV1 reader = new SimulatorConfigReaderV1();
-        Assertions.assertTrue(reader.loadConfig(file));
-        Assertions.assertNotNull(reader.getConfig());
-
-        Assertions.assertEquals("Winch", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(3));
-        Assertions.assertEquals("Drive Right (A)", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(103));
-        Assertions.assertEquals("Drive Right (B)", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(104));
-        Assertions.assertEquals("Drive Left (A)", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(101));
-        Assertions.assertEquals("Drive Left (B)", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(106));
-        Assertions.assertEquals("Elevator (A)", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(105));
-        Assertions.assertEquals("Elevator (B)", DataAccessorFactory.getInstance().getSpeedControllerAccessor().getName(102));
-
-        Assertions.assertEquals("Drive Right", DataAccessorFactory.getInstance().getEncoderAccessor().getName(103));
-        Assertions.assertEquals("Drive Left", DataAccessorFactory.getInstance().getEncoderAccessor().getName(101));
-        Assertions.assertEquals("Elevator", DataAccessorFactory.getInstance().getEncoderAccessor().getName(105));
-
-        Assertions.assertEquals("Robot Gyro", DataAccessorFactory.getInstance().getGyroAccessor().getName(100));
-
-        Assertions.assertEquals("Claw (A)", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(1));
-        Assertions.assertEquals("Claw (B)", DataAccessorFactory.getInstance().getSolenoidAccessor().getName(2));
     }
 }

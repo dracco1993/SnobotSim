@@ -9,10 +9,17 @@
 #include <filesystem>
 
 
+void ParseMap(const YAML::Node& aNode, std::map<int, std::string>& aMap)
+{
+    for (YAML::const_iterator it=aNode.begin(); it != aNode.end(); ++it) {
+        aMap[it->first.as<int>()] = it->second.as<std::string>();
+    }
+}
+
 template <typename T>
 void ParseVector(const YAML::Node& aNode, std::vector<T>& aVector)
 {
-    for (YAML::const_iterator it=aNode.begin(); it!=aNode.end(); ++it) {
+    for (YAML::const_iterator it=aNode.begin(); it != aNode.end(); ++it) {
         T value;
         (*it) >> value;
         aVector.push_back(value);
@@ -31,6 +38,8 @@ const YAML::Node& operator>> (const YAML::Node& aNode, BasicModuleConfig& aOutpu
 
 const YAML::Node& operator>> (const YAML::Node& configNode, SimulatorConfigV1& config)
 {
+    ParseMap(configNode["mDefaultI2CWrappers"], config.mDefaultI2CWrappers);
+    ParseMap(configNode["mDefaultSpiWrappers"], config.mDefaultSpiWrappers);
     ParseVector(configNode["mAccelerometers"], config.mAccelerometers);
     ParseVector(configNode["mAnalogIn"], config.mAnalogIn);
     ParseVector(configNode["mAnalogOut"], config.mAnalogOut);
@@ -62,7 +71,7 @@ void CreateBasicComponent(FactoryType& aFactory, const std::map<int, WrapperType
     auto findIter = wrapperMap.find(aConfig.mHandle);
     if(findIter != wrapperMap.end())
     {
-        findIter->second->SetName("HEllo");
+        findIter->second->SetName(aConfig.mName);
     }
     else
     {
@@ -101,10 +110,12 @@ void SetupSimulator(const SimulatorConfigV1& aConfig)
     for (auto it : aConfig.mDefaultI2CWrappers)
     {
         FactoryContainer::Get().GetI2CWrapperFactory()->RegisterDefaultWrapperType(it.first, it.second);
+        FactoryContainer::Get().GetI2CWrapperFactory()->GetI2CWrapper(it.first);
     }
     for (auto it : aConfig.mDefaultSpiWrappers)
     {
         FactoryContainer::Get().GetSpiWrapperFactory()->RegisterDefaultWrapperType(it.first, it.second);
+        FactoryContainer::Get().GetSpiWrapperFactory()->GetSpiWrapper(it.first);
     }
 
     CreateBasicComponents(FactoryContainer::Get().GetAccelerometerFactory(), SensorActuatorRegistry::Get().GetIAccelerometerWrapperMap(), aConfig.mAccelerometers);

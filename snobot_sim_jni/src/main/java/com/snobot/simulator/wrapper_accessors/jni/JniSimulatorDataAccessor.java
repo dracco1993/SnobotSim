@@ -109,14 +109,14 @@ public class JniSimulatorDataAccessor implements SimulatorDataAccessor
     @Override
     public boolean loadConfigFile(String aConfigFile)
     {
-        return false;
+        return SnobotSimulatorJni.loadConfigFile(aConfigFile);
     }
 
 
     @Override
     public boolean saveConfigFile(String aConfigFile)
     {
-        return false;
+        return SnobotSimulatorJni.saveConfigFile(aConfigFile);
     }
 
 }
