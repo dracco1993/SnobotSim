@@ -25,8 +25,13 @@ bool DigitalIoFactory::Create(int aHandle, const std::string& aType)
 
     if (aType == "com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper")
     {
-        SensorActuatorRegistry::Get().Register(aHandle,
-                std::shared_ptr<IDigitalIoWrapper>(new WpiDigitalIoWrapper(aHandle)));
+        if (!SensorActuatorRegistry::Get().GetIDigitalIoWrapper(aHandle, false))
+        {
+            SNOBOT_LOG(SnobotLogging::LOG_LEVEL_WARN, "Not set up before loading robot");
+
+            SensorActuatorRegistry::Get().Register(aHandle,
+                    std::shared_ptr<IDigitalIoWrapper>(new WpiDigitalIoWrapper(aHandle)));
+        }
     }
     else
     {

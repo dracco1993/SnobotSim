@@ -25,8 +25,12 @@ bool AnalogOutFactory::Create(int aHandle, const std::string& aType)
 
     if (aType == "com.snobot.simulator.module_wrapper.wpi.WpiAnalogOutWrapper")
     {
-        SensorActuatorRegistry::Get().Register(aHandle,
-                std::shared_ptr<IAnalogOutWrapper>(new WpiAnalogOutWrapper(aHandle)));
+        SNOBOT_LOG(SnobotLogging::LOG_LEVEL_WARN, "Not set up before loading robot");
+        if (!SensorActuatorRegistry::Get().GetIAnalogOutWrapper(aHandle, false))
+        {
+            SensorActuatorRegistry::Get().Register(aHandle,
+                    std::shared_ptr<IAnalogOutWrapper>(new WpiAnalogOutWrapper(aHandle)));
+        }
     }
     else
     {

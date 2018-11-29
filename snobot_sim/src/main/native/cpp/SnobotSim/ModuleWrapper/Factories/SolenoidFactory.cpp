@@ -25,8 +25,13 @@ bool SolenoidFactory::Create(int aHandle, const std::string& aType)
 
     if (aType == "com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper")
     {
-        SensorActuatorRegistry::Get().Register(aHandle,
-                std::shared_ptr<ISolenoidWrapper>(new WpiSolenoidWrapper(aHandle)));
+        if (!SensorActuatorRegistry::Get().GetISolenoidWrapper(aHandle, false))
+        {
+            SNOBOT_LOG(SnobotLogging::LOG_LEVEL_WARN, "Not set up before loading robot");
+
+            SensorActuatorRegistry::Get().Register(aHandle,
+                    std::shared_ptr<ISolenoidWrapper>(new WpiSolenoidWrapper(aHandle)));
+        }
     }
     else
     {
