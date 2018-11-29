@@ -28,6 +28,10 @@ bool GyroFactory::Create(int aHandle, const std::string& aType)
         std::shared_ptr<IGyroWrapper> gyroWrapper(new WpiAnalogGyroWrapper(aHandle));
         SensorActuatorRegistry::Get().Register(aHandle, gyroWrapper);
     }
+    else if(aType == "com.snobot.simulator.simulator_components.adx_family.ADXRS450GyroWrapper")
+    {
+        SNOBOT_LOG(SnobotLogging::LOG_LEVEL_DEBUG, "This type is set up elsewhere, won't do anything here");
+    }
     else
     {
         SNOBOT_LOG(SnobotLogging::LOG_LEVEL_WARN, "Unknown type " << aType);

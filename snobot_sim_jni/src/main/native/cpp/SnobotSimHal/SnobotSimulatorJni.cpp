@@ -137,6 +137,12 @@ JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_SimulationConnectorJni_
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_SnobotSimulatorJni_loadConfigFile
   (JNIEnv * env, jclass, jstring aFilename)
 {
+    if(aFilename == NULL)
+    {
+        SNOBOT_LOG(SnobotLogging::LOG_LEVEL_CRITICAL, "Simulator file was null! Won't hook anything up");
+        return true;
+    }
+
     SimulatorConfigReaderV1 configReader;
     return configReader.LoadConfig(env->GetStringUTFChars(aFilename, NULL));
 }
@@ -149,6 +155,12 @@ JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_SnobotSimulatorJni_load
 JNIEXPORT jboolean JNICALL Java_com_snobot_simulator_jni_SnobotSimulatorJni_saveConfigFile
   (JNIEnv * env, jclass, jstring aFilename)
 {
+    if(aFilename == NULL)
+    {
+        SNOBOT_LOG(SnobotLogging::LOG_LEVEL_CRITICAL, "Simulator file was null!");
+        return false;
+    }
+
     return false;
 }
 

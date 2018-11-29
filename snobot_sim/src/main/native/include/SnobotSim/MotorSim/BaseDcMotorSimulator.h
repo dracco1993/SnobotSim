@@ -40,6 +40,8 @@ public:
 
     void Reset(double aPosition, double aVelocity, double aCurrent) override;
 
+    double GetConversionFactor();
+
     virtual const DcMotorModel& GetMotorModel();
 
 protected:
