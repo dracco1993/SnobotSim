@@ -25,13 +25,8 @@ bool EncoderFactory::Create(int aHandle, const std::string& aType)
 
     if (aType == "com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper")
     {
-        if (!SensorActuatorRegistry::Get().GetIEncoderWrapper(aHandle, false))
-        {
-            SNOBOT_LOG(SnobotLogging::LOG_LEVEL_WARN, "Not set up before loading robot");
-
-            SensorActuatorRegistry::Get().Register(aHandle,
-                    std::shared_ptr<IEncoderWrapper>(new WpiEncoderWrapper(aHandle, aHandle)));
-        }
+        SensorActuatorRegistry::Get().Register(aHandle,
+                std::shared_ptr<IEncoderWrapper>(new WpiEncoderWrapper(aHandle, aHandle)));
     }
     else
     {

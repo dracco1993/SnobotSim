@@ -41,7 +41,6 @@ public class TestEncoderJni extends BaseSimulatorJniTest
         DataAccessorFactory.getInstance().getEncoderAccessor().createSimulator(0, "com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper");
         Assertions.assertFalse(DataAccessorFactory.getInstance().getEncoderAccessor().isInitialized(0));
 
-        System.out.println("Hello");
         new Encoder(1, 2);
         Assertions.assertTrue(DataAccessorFactory.getInstance().getEncoderAccessor().isInitialized(0));
     }
