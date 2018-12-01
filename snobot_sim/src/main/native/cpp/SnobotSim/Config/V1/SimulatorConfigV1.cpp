@@ -1,5 +1,6 @@
 
 #include "SnobotSim/Config/SimulatorConfigV1.h"
+#include <iostream>
 
 
 template <typename T>

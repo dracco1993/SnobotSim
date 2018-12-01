@@ -6,7 +6,7 @@
 #include "SnobotSim/SensorActuatorRegistry.h"
 #include "yaml-cpp/yaml.h"
 #include <iostream>
-#include <filesystem>
+#include <experimental/filesystem>
 
 
 template <typename T>
@@ -56,7 +56,7 @@ SimulatorConfigReaderV1::~SimulatorConfigReaderV1()
 }
 
 template <typename FactoryType, typename WrapperType>
-void CreateBasicComponent(FactoryType& aFactory, const std::map<int, WrapperType>& wrapperMap, const BasicModuleConfig& aConfig)
+void CreateBasicComponent(std::shared_ptr<FactoryType> aFactory, const std::map<int, WrapperType>& wrapperMap, const BasicModuleConfig& aConfig)
 {
     aFactory->Create(aConfig.mHandle, aConfig.mType);
     auto findIter = wrapperMap.find(aConfig.mHandle);
@@ -71,7 +71,7 @@ void CreateBasicComponent(FactoryType& aFactory, const std::map<int, WrapperType
 }
 
 template <typename FactoryType, typename WrapperType>
-void CreateBasicComponents(FactoryType& aFactory, const std::map<int, WrapperType>& wrapperMap, const std::vector<BasicModuleConfig>& aConfigs)
+void CreateBasicComponents(std::shared_ptr<FactoryType> aFactory, const std::map<int, WrapperType>& wrapperMap, const std::vector<BasicModuleConfig>& aConfigs)
 {
     for(auto it : aConfigs)
     {
@@ -80,7 +80,7 @@ void CreateBasicComponents(FactoryType& aFactory, const std::map<int, WrapperTyp
 }
 
 
-void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory>& aFactory, const std::map<int, std::shared_ptr<ISpeedControllerWrapper>>& wrapperMap, const std::vector<PwmConfig>& aConfigs)
+void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory> aFactory, const std::map<int, std::shared_ptr<ISpeedControllerWrapper>>& wrapperMap, const std::vector<PwmConfig>& aConfigs)
 {
     for(auto it : aConfigs)
     {
@@ -88,7 +88,7 @@ void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory>& aFactory, cons
     }
 }
 
-void CreateEncoderComponents(std::shared_ptr<EncoderFactory>& aFactory, const std::map<int, std::shared_ptr<IEncoderWrapper>>& wrapperMap, const std::vector<EncoderConfig>& aConfigs)
+void CreateEncoderComponents(std::shared_ptr<EncoderFactory> aFactory, const std::map<int, std::shared_ptr<IEncoderWrapper>>& wrapperMap, const std::vector<EncoderConfig>& aConfigs)
 {
     for(auto it : aConfigs)
     {
