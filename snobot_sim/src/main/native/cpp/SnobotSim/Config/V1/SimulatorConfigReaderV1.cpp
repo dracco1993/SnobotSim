@@ -1,5 +1,10 @@
 
 #include "SnobotSim/Config/SimulatorConfigReaderV1.h"
+
+#include <iostream>
+
+#include <experimental/filesystem>
+
 #include "SnobotSim/Config/SimulatorConfigV1.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
 #include "SnobotSim/MotorSim/GravityLoadDcMotorSim.h"
@@ -10,9 +15,6 @@
 #include "SnobotSim/GetSensorActuatorHelper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 #include "yaml-cpp/yaml.h"
-#include <iostream>
-#include <filesystem>
-
 
 void ParseMap(const YAML::Node& aNode, std::map<int, std::string>& aMap)
 {
@@ -24,7 +26,8 @@ void ParseMap(const YAML::Node& aNode, std::map<int, std::string>& aMap)
 template <typename T>
 void ParseVector(const YAML::Node& aNode, std::vector<T>& aVector)
 {
-    for (YAML::const_iterator it=aNode.begin(); it != aNode.end(); ++it) {
+    for (YAML::const_iterator it = aNode.begin(); it != aNode.end(); ++it)
+    {
         T value;
         (*it) >> value;
         aVector.push_back(value);
@@ -113,23 +116,20 @@ const YAML::Node& operator>> (const YAML::Node& configNode, SimulatorConfigV1& c
     return configNode;
 }
 
-
 SimulatorConfigReaderV1::SimulatorConfigReaderV1()
 {
-
 }
 
 SimulatorConfigReaderV1::~SimulatorConfigReaderV1()
 {
-    
 }
 
 template <typename FactoryType, typename WrapperType>
-void CreateBasicComponent(FactoryType& aFactory, const std::map<int, WrapperType>& wrapperMap, const BasicModuleConfig& aConfig)
+void CreateBasicComponent(std::shared_ptr<FactoryType> aFactory, const std::map<int, WrapperType>& wrapperMap, const BasicModuleConfig& aConfig)
 {
     aFactory->Create(aConfig.mHandle, aConfig.mType);
     auto findIter = wrapperMap.find(aConfig.mHandle);
-    if(findIter != wrapperMap.end())
+    if (findIter != wrapperMap.end())
     {
         findIter->second->SetName(aConfig.mName);
     }
@@ -140,18 +140,17 @@ void CreateBasicComponent(FactoryType& aFactory, const std::map<int, WrapperType
 }
 
 template <typename FactoryType, typename WrapperType>
-void CreateBasicComponents(FactoryType& aFactory, const std::map<int, WrapperType>& wrapperMap, const std::vector<BasicModuleConfig>& aConfigs)
+void CreateBasicComponents(std::shared_ptr<FactoryType> aFactory, const std::map<int, WrapperType>& wrapperMap, const std::vector<BasicModuleConfig>& aConfigs)
 {
-    for(auto it : aConfigs)
+    for (auto it : aConfigs)
     {
         CreateBasicComponent(aFactory, wrapperMap, it);
     }
 }
 
-
-void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory>& aFactory, const std::map<int, std::shared_ptr<ISpeedControllerWrapper>>& wrapperMap, const std::vector<PwmConfig>& aConfigs)
+void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory> aFactory, const std::map<int, std::shared_ptr<ISpeedControllerWrapper>>& wrapperMap, const std::vector<PwmConfig>& aConfigs)
 {
-    for(auto it : aConfigs)
+    for (auto it : aConfigs)
     {
         CreateBasicComponent(aFactory, wrapperMap, it);
         
@@ -221,9 +220,9 @@ void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory>& aFactory, cons
     }
 }
 
-void CreateEncoderComponents(std::shared_ptr<EncoderFactory>& aFactory, const std::map<int, std::shared_ptr<IEncoderWrapper>>& wrapperMap, const std::vector<EncoderConfig>& aConfigs)
+void CreateEncoderComponents(std::shared_ptr<EncoderFactory> aFactory, const std::map<int, std::shared_ptr<IEncoderWrapper>>& wrapperMap, const std::vector<EncoderConfig>& aConfigs)
 {
-    for(auto it : aConfigs)
+    for (auto it : aConfigs)
     {
         CreateBasicComponent(aFactory, wrapperMap, it);
         if(it.mHandle != -1 && it.mConnectedSpeedControllerHandle != -1)
@@ -265,7 +264,6 @@ void SetupSimulator(const SimulatorConfigV1& aConfig)
     
     CreatePwmComponents(FactoryContainer::Get().GetSpeedControllerFactory(), SensorActuatorRegistry::Get().GetISpeedControllerWrapperMap(), aConfig.mPwm);
     CreateEncoderComponents(FactoryContainer::Get().GetEncoderFactory(), SensorActuatorRegistry::Get().GetIEncoderWrapperMap(), aConfig.mEncoders);
-    
 }
 
 bool SimulatorConfigReaderV1::LoadConfig(const std::string& aConfigFile)
@@ -285,7 +283,7 @@ bool SimulatorConfigReaderV1::LoadConfig(const std::string& aConfigFile)
 
         SetupSimulator(config);
     }
-    catch(std::exception& ex)
+    catch (std::exception& ex)
     {
         SNOBOT_LOG(SnobotLogging::LOG_LEVEL_CRITICAL, "Could not parse config file... " << ex.what());
         success = false;
