@@ -55,7 +55,7 @@
         <Class name="com.snobot.simulator.jni.TestRegisterJavaCallback"/>
         <Bug pattern="DLS_DEAD_LOCAL_STORE" />
     </Match>
-    
+
     <!-- snobot_sim_java -->
     <Match>
         <Class name="com.snobot.simulator.config.v1.SimulatorConfigReaderV1"/>

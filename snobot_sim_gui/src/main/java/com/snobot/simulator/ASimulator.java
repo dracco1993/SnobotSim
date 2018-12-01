@@ -15,7 +15,7 @@ public class ASimulator implements ISimulatorUpdater
 
     protected ASimulator()
     {
-        
+
     }
 
     public boolean loadConfig(String aConfigFile)

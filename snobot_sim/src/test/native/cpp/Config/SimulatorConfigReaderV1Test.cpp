@@ -1,7 +1,6 @@
 
-#include "gtest/gtest.h"
-
 #include "SnobotSim/Config/SimulatorConfigReaderV1.h"
+#include "gtest/gtest.h"
 
 TEST(LoadConfigFile, TestGoodFile)
 {

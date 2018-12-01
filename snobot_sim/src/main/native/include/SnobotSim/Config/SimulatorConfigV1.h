@@ -1,7 +1,9 @@
 
+#pragma once
+
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 struct BasicModuleConfig
 {
@@ -9,22 +11,20 @@ struct BasicModuleConfig
     std::string mName = "";
     std::string mType = "";
 
-    virtual void Print(std::ostream& aStream, const std::string& aIndent="");
+    virtual void Print(std::ostream& aStream, const std::string& aIndent = "");
 };
 
 struct EncoderConfig : public BasicModuleConfig
 {
     int mConnectedSpeedControllerHandle = 0;
 
-    void Print(std::ostream& aStream, const std::string& aIndent="") override;
+    void Print(std::ostream& aStream, const std::string& aIndent = "") override;
 };
 
 struct PwmConfig : public BasicModuleConfig
 {
-
-    void Print(std::ostream& aStream, const std::string& aIndent="") override;
+    void Print(std::ostream& aStream, const std::string& aIndent = "") override;
 };
-
 
 struct SimulatorConfigV1
 {
@@ -39,6 +39,6 @@ struct SimulatorConfigV1
     std::vector<PwmConfig> mPwm;
     std::map<int, std::string> mDefaultI2CWrappers;
     std::map<int, std::string> mDefaultSpiWrappers;
-    
+
     virtual void Print(std::ostream& aStream);
 };
