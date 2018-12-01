@@ -40,4 +40,4 @@ FIND_MODULE_FUNC(ISolenoidWrapper)
 FIND_MODULE_FUNC(IEncoderWrapper)
 FIND_MODULE_FUNC(ISpiWrapper)
 FIND_MODULE_FUNC(II2CWrapper)
-} // namespace GetSensorActuatorHelper
+}  // namespace GetSensorActuatorHelper

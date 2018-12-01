@@ -109,4 +109,4 @@ Java_edu_wpi_first_hal_sim_mockdata_ADXL345_1SPIAccelerometerDataJNI_setZ
     accel->SetZ(z);
 }
 
-} // extern "C"
+}  // extern "C"

@@ -6,13 +6,13 @@
 #include <experimental/filesystem>
 
 #include "SnobotSim/Config/SimulatorConfigV1.h"
+#include "SnobotSim/GetSensorActuatorHelper.h"
 #include "SnobotSim/Logging/SnobotLogger.h"
+#include "SnobotSim/ModuleWrapper/Factories/FactoryContainer.h"
 #include "SnobotSim/MotorSim/GravityLoadDcMotorSim.h"
 #include "SnobotSim/MotorSim/RotationalLoadDcMotorSim.h"
 #include "SnobotSim/MotorSim/SimpleMotorSimulator.h"
 #include "SnobotSim/MotorSim/StaticLoadDcMotorSim.h"
-#include "SnobotSim/ModuleWrapper/Factories/FactoryContainer.h"
-#include "SnobotSim/GetSensorActuatorHelper.h"
 #include "SnobotSim/SensorActuatorRegistry.h"
 #include "yaml-cpp/yaml.h"
 
@@ -57,7 +57,7 @@ const YAML::Node& operator>> (const YAML::Node& aNode, PwmConfig& aOutput)
     {
         const YAML::Node& motorSimConfig = aNode["mMotorSimConfig"];
         const std::string& motorSimConfigTag = motorSimConfig.Tag();
-        
+
         if(motorSimConfigTag == "tag:yaml.org,2002:com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig")
         {
             aOutput.mMotorSimConfigType = PwmConfig::Simple;
@@ -153,7 +153,7 @@ void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory> aFactory, const
     for (auto it : aConfigs)
     {
         CreateBasicComponent(aFactory, wrapperMap, it);
-        
+
         std::shared_ptr<ISpeedControllerWrapper> speedController = GetSensorActuatorHelper::GetISpeedControllerWrapper(it.mHandle);
         if(!speedController)
         {
@@ -192,30 +192,30 @@ void CreatePwmComponents(std::shared_ptr<SpeedControllerFactory> aFactory, const
             case PwmConfig::Static:
             {
                 speedController->SetMotorSimulator(std::shared_ptr < IMotorSimulator > (new StaticLoadDcMotorSim(
-                    motorModel, 
-                    it.mMotorSimConfig.mStatic.mLoad, 
+                    motorModel,
+                    it.mMotorSimConfig.mStatic.mLoad,
                     it.mMotorSimConfig.mStatic.mConversionFactor)));
                 break;
             }
             case PwmConfig::Gravity:
             {
                 speedController->SetMotorSimulator(std::shared_ptr < IMotorSimulator > (new GravityLoadDcMotorSim(
-                    motorModel, 
+                    motorModel,
                     it.mMotorSimConfig.mGravity.mLoad)));
                 break;
             }
             case PwmConfig::Rotational:
             {
                 speedController->SetMotorSimulator(std::shared_ptr < IMotorSimulator > (new RotationalLoadDcMotorSim(
-                    motorModel, 
+                    motorModel,
                     speedController,
-                    it.mMotorSimConfig.mRotational.mArmCenterOfMass, 
-                    it.mMotorSimConfig.mRotational.mArmMass, 
-                    it.mMotorSimConfig.mRotational.mConstantAssistTorque, 
+                    it.mMotorSimConfig.mRotational.mArmCenterOfMass,
+                    it.mMotorSimConfig.mRotational.mArmMass,
+                    it.mMotorSimConfig.mRotational.mConstantAssistTorque,
                     it.mMotorSimConfig.mRotational.mOverCenterAssistTorque)));
                 break;
             }
-            
+
         }
     }
 }
@@ -261,7 +261,7 @@ void SetupSimulator(const SimulatorConfigV1& aConfig)
     CreateBasicComponents(FactoryContainer::Get().GetGyroFactory(), SensorActuatorRegistry::Get().GetIGyroWrapperMap(), aConfig.mGyros);
     CreateBasicComponents(FactoryContainer::Get().GetRelayFactory(), SensorActuatorRegistry::Get().GetIRelayWrapperMap(), aConfig.mRelays);
     CreateBasicComponents(FactoryContainer::Get().GetSolenoidFactory(), SensorActuatorRegistry::Get().GetISolenoidWrapperMap(), aConfig.mSolenoids);
-    
+
     CreatePwmComponents(FactoryContainer::Get().GetSpeedControllerFactory(), SensorActuatorRegistry::Get().GetISpeedControllerWrapperMap(), aConfig.mPwm);
     CreateEncoderComponents(FactoryContainer::Get().GetEncoderFactory(), SensorActuatorRegistry::Get().GetIEncoderWrapperMap(), aConfig.mEncoders);
 }

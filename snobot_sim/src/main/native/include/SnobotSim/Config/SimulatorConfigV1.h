@@ -21,10 +21,9 @@ struct EncoderConfig : public BasicModuleConfig
     void Print(std::ostream& aStream, const std::string& aIndent = "") override;
 };
 
-
 struct SimpleMotorSimulationConfig
 {
-    double mMaxSpeed; 
+    double mMaxSpeed;
 };
 
 struct StaticLoadMotorSimulationConfig
@@ -35,7 +34,7 @@ struct StaticLoadMotorSimulationConfig
 
 struct GravityLoadMotorSimulationConfig
 {
-    double mLoad; 
+    double mLoad;
 };
 
 struct DcMotorModelConfigConfig
@@ -63,7 +62,6 @@ struct DcMotorModelConfigConfig
 
     FactoryParams mFactoryParams;
     MotorParams mMotorParams;
-
 };
 
 struct RotationalLoadMotorSimulationConfig
@@ -76,8 +74,7 @@ struct RotationalLoadMotorSimulationConfig
 
 struct PwmConfig : public BasicModuleConfig
 {
-    union MotorSimConfig
-    {
+    union MotorSimConfig {
         SimpleMotorSimulationConfig mSimple;
         StaticLoadMotorSimulationConfig mStatic;
         GravityLoadMotorSimulationConfig mGravity;
@@ -97,7 +94,7 @@ struct PwmConfig : public BasicModuleConfig
     MotorSimConfigType mMotorSimConfigType = None;
     DcMotorModelConfigConfig mMotorModelConfig;
 
-    void Print(std::ostream& aStream, const std::string& aIndent="") override;
+    void Print(std::ostream& aStream, const std::string& aIndent = "") override;
 };
 
 struct SimulatorConfigV1

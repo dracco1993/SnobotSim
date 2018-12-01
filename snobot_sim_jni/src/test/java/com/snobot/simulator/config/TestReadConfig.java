@@ -99,7 +99,5 @@ public class TestReadConfig extends BaseSimulatorJniTest
             Assertions.assertEquals(.5, config.mLoad, DOUBLE_EPSILON);
             Assertions.assertEquals(6.28, config.mConversionFactor, DOUBLE_EPSILON);
         }
-
-        Assertions.assertEquals(3, DataAccessorFactory.getInstance().getSimulatorDataAccessor().getSimulatorComponentConfigs().size());
     }
 }
