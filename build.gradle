@@ -21,7 +21,7 @@ plugins {
     id 'edu.wpi.first.NativeUtils' version '2.0.1'
     id 'edu.wpi.first.GradleJni' version '0.3.1' apply false
     id "com.diffplug.gradle.spotless" version "3.10.0"
-    id 'com.gradle.build-scan' version '1.15.1'
+    id 'com.gradle.build-scan' version '2.0.2'
     id "com.github.spotbugs" version "1.6.4"
 }
 apply plugin: 'nebula-aggregate-javadocs'
@@ -102,14 +102,10 @@ def getCtreNativeExtractedLocation() {
 }
 
 // Publshing Information
-
-ext.maven_publishing_path = "$rootDir/build/maven_repo/"
 if(hasProperty('maven_repo'))
 {
-    ext.maven_publishing_path = maven_repo
+    throw new GradleException("This isn't supported anymore")
 }
-ext.maven_publishing_path = new File(maven_publishing_path).getAbsolutePath()
-println "Publishing maven to " + ext.maven_publishing_path.toString()
 
 ext.maven_version = "2019-0.0.1-RC"
 if(hasProperty('maven_version'))
@@ -117,7 +113,7 @@ if(hasProperty('maven_version'))
     ext.maven_version = maven_version
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.9'
+wrapper {
+    gradleVersion = '5.0'
 }
 

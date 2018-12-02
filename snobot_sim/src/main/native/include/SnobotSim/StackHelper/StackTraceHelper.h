@@ -4,4 +4,4 @@
 namespace StackTraceHelper
 {
 void PrintStackTracker();
-}  // namespace StackTraceHelper
+} // namespace StackTraceHelper
