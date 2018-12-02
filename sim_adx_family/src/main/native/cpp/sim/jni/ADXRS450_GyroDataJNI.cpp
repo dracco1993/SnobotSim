@@ -55,4 +55,4 @@ Java_edu_wpi_first_hal_sim_mockdata_ADXRS450_1GyroDataJNI_setAngle
     ((hal::ADXRS450_SpiGyroWrapper*)aPointerAddress)->SetAngle(aAngle);
 }
 
-}  // extern "C"
+} // extern "C"
